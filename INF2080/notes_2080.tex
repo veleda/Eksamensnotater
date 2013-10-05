@@ -21,24 +21,19 @@
 
 \usepackage{xcolor}
 
-\usepackage{hyperref}
-\hypersetup{
-	hidelinks
-}
-
 \newcommand\DrawCircleIns[2]{%
 circle ({#2*cos(180/#1)})
 }
 
 \newtheoremstyle{mytheoremstyle} 	% name
-    {\topsep}                    			% Space above
-    {\topsep}                    			% Space below
-    {\itshape}                   			% Body font
-    {}                           			% Indent amount
-    {\scshape}                   			% Theorem head font
-    {.}                          			% Punctuation after theorem head
-    {.5em}                       			% Space after theorem head
-    {} 				 			% Theorem head spec (can be left empty, meaning ‘normal’)
+    {\topsep}                    				% Space above
+    {\topsep}                    				% Space below
+    {\itshape}                   				% Body font
+    {}                           					% Indent amount
+    {\scshape}                   				% Theorem head font
+    {.}                          					% Punctuation after theorem head
+    {.5em}                       				% Space after theorem head
+    {} 				 				% Theorem head spec (can be left empty, meaning ‘normal’)
 
 \title{Notater: INF2080}
 \author{Veronika Heimsbakk \\ 
@@ -103,11 +98,13 @@ En mengde er en endelig eller uendelig samling av objekter der rekkefølgen igno
 	 \tikzstyle{selected vertex} = [vertex, fill=red!24]
 	 \tikzstyle{selected edge} = [draw,line width=2pt,-,red!100]
 	 \tikzstyle{edge} = [draw,thick,-,black]
-	 \node[vertex] (v0) at (1,1.1) {5};
-	 \node[vertex] (v1) at (1.5,1.1) {2};
-	 \node[vertex] (v2) at (1.25,1.7) {1};
-	 \node[vertex] (v3) at (1.6,1.5) {4};
-	 \node[vertex] (v4) at (0.9,1.5) {3};
+
+	 \node[vertex] (v0) at (1,1.1) 		{5};
+	 \node[vertex] (v1) at (1.5,1.1) 	{2};
+	 \node[vertex] (v2) at (1.25,1.7) 	{1};
+	 \node[vertex] (v3) at (1.6,1.5) 	{4};
+	 \node[vertex] (v4) at (0.9,1.5) 	{3};
+
 	 \draw[edge] (v0)  -- (v3) -- (v4) -- (v1) -- (v2) -- (v0); 
  \end{tikzpicture}
  }
@@ -123,11 +120,13 @@ En \textbf{urettet graf}, er en mengde linjer som kobler sammen noen punkter. Pu
 	 \tikzstyle{vertex}=[circle,minimum size=20pt,inner sep=0pt,fill=black!10]
 	 \tikzstyle{selected edge} = [draw,line width=2pt,-,red!100]
 	 \tikzstyle{edge} = [draw,thick,-,black, every path/.style={->}]
-	 \node[vertex] (v0) at (0.5,0.5) {1};
-	\node[vertex] (v1) at (1.2,0.5) {2};
-	\node[vertex] (v2) at (0.5,0.1) {3};
-	\node[vertex] (v3) at (1.2,0.1) {4};
-	 \draw[edge] (v0)  -- (v1) -- (v3) -- (v2) -- (v0); 
+	 
+	\node [vertex] (v0) at (0.5,0.5) 	{1};
+	 \node[vertex] (v1) at (1.2,0.5) 	{2};
+	 \node[vertex] (v2) at (0.5,0.1) 	{3};
+	 \node[vertex] (v3) at (1.2,0.1) 	{4};
+
+	\draw[edge] (v0)  -- (v1) -- (v3) -- (v2) -- (v0); 
 	\draw[edge] (v0)  -- (v3) -- (v1) -- (v2); 
 	\draw[selected edge] (v3) -- (v1) -- (v2) -- (v3);
  \end{tikzpicture}
@@ -146,18 +145,18 @@ I Fig. 2 er den rød streken en \textbf{subgraf} av hele grafen i figuren. De r�
 \begin{figure}[h!]
 \centering
 \begin{tikzpicture}[->,auto,node distance=2.8cm,line width=0.2mm]
-  \node[initial,state] 	(A)                    {$q_0$};
-  \node[state]         	(B) [right of=A] {};
-  \node[state]			(C) [below right of=A] {};
-  \node[state,accepting]			(D) [right of=B] {$q_a$};
+  \node[initial,state] 	(A)                 	   			{$q_0$};
+  \node[state]         		(B) [right of=A] 			{};
+  \node[state]			(C) [below right of=A] 		{};
+  \node[state,accepting]			(D) [right of=B] 	{$q_a$};
 
-  \path 	(A) edge  node {0} (B)
-        	(B) edge [loop above] node {0} (B)
-			edge [bend left] node {1} (D)
-			edge node {1} (C)
-		(C) edge [loop below] node {1,0} (C)
-		(D) edge [loop above] node {1} (D)
-			edge [bend left] node {0} (B);
+  \path 	(A) 	edge  node 				{0} 	(B)
+        		(B) 	edge [loop above] node 	{0} 	(B)
+			edge [bend left] node 		{1} 	(D)
+			edge node 				{1} 	(C)
+		(C) 	edge [loop below] node 	{1,0} (C)
+		(D) 	edge [loop above] node 	{1} 	(D)
+			edge [bend left] node 		{0} 	(B);
 \end{tikzpicture}
 \caption{Eksempel på en deterministic finite automata (DFA).}
 \label{fig:dfa}
@@ -179,12 +178,12 @@ I Fig. 2 er den rød streken en \textbf{subgraf} av hele grafen i figuren. De r�
 \paragraph{Eksempel på input og utfall} for automaten i Figur ~\ref{fig:dfa}.
 \begin{center}
 \begin{tabular}{ l l }
-Input & Utfall\\
-\hline
-01 & akseptert\\
-010 & avvist\\
-0011 & akseptert\\
-00110 & avvist\\
+	Input & Utfall\\
+	\hline
+	01 & akseptert\\
+	010 & avvist\\
+	0011 & akseptert\\
+	00110 & avvist\\
 \end{tabular}
 \end{center}
 
@@ -194,12 +193,13 @@ La automaten i Figur ~\ref{fig:dfa} hete $M$, $M$ kjenner igjen språket: $L(M) 
 \newtheorem{dfa}{Definisjon}[section]
 \begin{dfa}
 En \textbf{deterministic finite automata} er et 5-tuppel $(Q, \Sigma, \delta, q_0, F)$, hvor:
+
 \begin{itemize}
-\item{$Q$ er et sett tilstander.}
-\item{$\Sigma$ er input alfabetet.}
-\item{$\delta$: $Q  \times \Sigma \rightarrow Q$ er pilenes funksjon.}
-\item{$q_0$ er $Q$ som starttilstand.}
-\item{$F \subseteq Q$ er de x-antall aksepterte.}
+	\item{$Q$ er et sett tilstander.}
+	\item{$\Sigma$ er input alfabetet.}
+	\item{$\delta$: $Q  \times \Sigma \rightarrow Q$ er pilenes funksjon.}
+	\item{$q_0$ er $Q$ som starttilstand.}
+	\item{$F \subseteq Q$ er de x-antall aksepterte.}
 \end{itemize}
 \end{dfa}
 
@@ -209,18 +209,18 @@ Over språket $\Sigma = \{a,b\}$
 \begin{figure}[h!]
 \centering
 \begin{tikzpicture}[->,auto,node distance=2.8cm,line width=0.2mm]
-  \node[initial,state] 			(A)                 	{$q_1$};
-  \node[state]         			(B) [right of=A] 	{$q_2$};
+  \node[initial,state] 			(A)		                 	{$q_1$};
+  \node[state]         				(B) [right of=A] 	{$q_2$};
   \node[state]					(C) [right of=B] 	{$q_3$};
   \node[state,accepting]			(D) [right of=C] 	{$q_4$};
 
-  \path 	(A) edge [loop above] node {b} (A)
-			edge node {a} (B)
-        	(B) edge [loop above] node {b} (B)
-			edge node {a} (C)
-		(C) edge [loop above] node {b} (C)
-			edge node {a} (D)
-		(D) edge [loop above] node {b,a} (D);
+  \path 	(A) edge [loop above] node 		{b} 	(A)
+			edge node 				{a} 	(B)
+        		(B) edge [loop above] node 		{b} 	(B)
+			edge node 				{a} 	(C)
+		(C) edge [loop above] node 		{b}	(C)
+			edge node 				{a} 	(D)
+		(D) edge [loop above] node 		{b,a}	(D);
 \end{tikzpicture}
 \caption{Gjenkjenner om et ord har minst tre a-er.}
 \end{figure}
@@ -228,15 +228,15 @@ Over språket $\Sigma = \{a,b\}$
 \begin{figure}[h!]
 \centering
 \begin{tikzpicture}[->,auto,node distance=2.8cm,line width=0.2mm]
-  \node[initial,state] 			(A)                 	{$q_1$};
-  \node[state]         			(B) [right of=A] 	{$q_2$};
+  \node[initial,state] 			(A)		                 	{$q_1$};
+  \node[state]         				(B) [right of=A] 	{$q_2$};
   \node[state,accepting]			(C) [right of=B] 	{$q_3$};
 
-  \path 	(A) edge [loop above] node {a} (A)
-			edge node {b} (B)
-        	(B) edge [loop above] node {a} (B)
-			edge node {b} (C)
-		(C) edge [loop above] node {b,a} (C);
+  \path 	(A) edge [loop above] node 	{a} 	(A)
+			edge node 			{b}	(B)
+	        	(B) edge [loop above] node 	{a} 	(B)
+			edge node 			{b} 	(C)
+		(C) edge [loop above] node 	{b,a} (C);
 \end{tikzpicture}
 \caption{Gjenkjenner om et ord har minst to b-er.}
 \end{figure}
@@ -246,8 +246,8 @@ Hva nå om vi vil slå sammen disse to, og ha en automat som gjenkjenner minst t
 \begin{figure}[h!]
 \centering
 \begin{tikzpicture}[->,auto,node distance=4cm,line width=0.2mm,every state/.style={scale=0.7}]
-	\node[initial,state] 				(A)                 		{$<q_1, p_1>$};
-	\node[state]         			(B) [above right of=A] 	{$<q_2, p_1>$};
+	\node[initial,state] 				(A)		                 		{$<q_1, p_1>$};
+	\node[state]         				(B) [above right of=A] 	{$<q_2, p_1>$};
 	\node[state]					(C) [below right of=A] 	{$<q_1, p_2>$};
 	\node[state]					(D) [below of=C]		{$<q_1, p_3>$};
 	\node[state]					(E) [above right of=D]	{$<q_2, p_3>$};
@@ -259,29 +259,29 @@ Hva nå om vi vil slå sammen disse to, og ha en automat som gjenkjenner minst t
 	\node[state]					(K) [above right of=B]	{$<q_3, p_1>$};
 	\node[state]					(L) [right of=K]		{$<q_4, p_1>$};
 
-  	\path 	(A) edge node {a} (B)
-				edge node {b} (C)
-			(B) edge node {b} (K)
-				edge node {b} (J)
-			(C) edge node {a} (J)
-				edge node {b} (D)
-			(D) edge node {a} (E)
-				edge [loop below] node {b} (D)
-			(E) edge node {a} (F)
-				edge [loop below] node {b} (E)
-			(F) edge node {a} (G)
-				edge [loop below] node {b} (F)
-			(G) edge [loop right] node {a,b} (G)
-			(H) edge node {b} (G)
-				edge [loop right] node {a} (H)
-			(I) edge node {a} (H)
-				edge node {b} (F)
-			(J) edge node {a} (I)
-				edge node {b} (E)
-			(K) edge node {a} (L)
-				edge node {b} (I)
-			(L) edge [loop above] node {a} (L)
-				edge node {b} (H);
+  	\path 	(A) edge node 				{a} 	(B)
+				edge node 				{b} 	(C)
+			(B) edge node 				{b} 	(K)
+				edge node 				{b} 	(J)
+			(C) edge node 				{a} 	(J)
+				edge node 				{b} 	(D)
+			(D) edge node 				{a} 	(E)
+				edge [loop below] node 	{b} 	(D)
+			(E) edge node 					{a} 	(F)
+				edge [loop below] node 	{b} 	(E)
+			(F) edge node 					{a} 	(G)
+				edge [loop below] node 	{b} 	(F)
+			(G) edge [loop right] node 		{a,b} (G)
+			(H) edge node 				{b} 	(G)
+				edge [loop right] node 		{a} 	(H)
+			(I) edge node 					{a} 	(H)
+				edge node 				{b} 	(F)
+			(J) edge node 					{a} 	(I)
+				edge node 				{b}	(E)
+			(K) edge node 				{a} 	(L)
+				edge node 				{b} 	(I)
+			(L) edge [loop above] node 		{a}	(L)
+				edge node 				{b} 	(H);
 \end{tikzpicture}
 \caption{Gjenkjenner om et ord har minst to b-er og minst tre a-er.}
 \end{figure}
@@ -292,16 +292,16 @@ Hos en DFA er neste tilstand bestemt av inputen. I en NFA har man flervalg, man 
 \begin{figure}[h!]
 \centering
 \begin{tikzpicture}[->,auto,node distance=5cm,line width=0.2mm]
-  \node[initial,state,accepting] 	(A)                 		{$q_0$};
-  \node[state]         			(B) [below right of=A] 	{$q_1$};
+  \node[initial,state,accepting] 	(A)                 			{$q_0$};
+  \node[state]         				(B) [below right of=A] 	{$q_1$};
   \node[state]					(C) [below left of=A] 	{$q_2$};
 
-  \path 	(A) edge [bend left] node {$\varepsilon$} (B)
-			edge node {b} (C)
-        	(B) edge [bend left] node {a} (A)
-			edge [bend left] node {b} (C)
-		(C) edge [loop below] node {a} (C)
-			edge [bend left] node {a,b} (B);
+  \path 	(A) edge [bend left] node 	{$\varepsilon$} 	(B)
+			edge node 			{b} 				(C)
+       	 	(B) edge [bend left] node 	{a} 				(A)
+			edge [bend left] node 	{b} 				(C)
+		(C) edge [loop below] node 	{a} 				(C)
+			edge [bend left] node 	{a,b} 			(B);
 \end{tikzpicture}
 \caption{Eksempel på en NFA.}
 \end{figure}
@@ -311,20 +311,20 @@ Hos en DFA er neste tilstand bestemt av inputen. I en NFA har man flervalg, man 
 \begin{nfa}
 En \textbf{nondeterministic finite automata} er et 5-tuppel $(Q, \Sigma, \delta, q_0, F)$, hvor:
 \begin{enumerate}
-\item{$Q$ er tilstandene.}
-\item{$\Sigma$ er alfabetet.}
-\item{$\delta : Q \times \Sigma_{\epsilon} \longrightarrow P(Q)$}
-\item{$q_0 \in Q$ er starttilstanden.}
-\item{$F \subseteq Q$ er de aksepterte tilstandene.}
+	\item{$Q$ er tilstandene.}
+	\item{$\Sigma$ er alfabetet.}
+	\item{$\delta : Q \times \Sigma_{\epsilon} \longrightarrow P(Q)$}
+	\item{$q_0 \in Q$ er starttilstanden.}
+	\item{$F \subseteq Q$ er de aksepterte tilstandene.}
 \end{enumerate}
 \end{nfa}
 
 \subsection{Pumpelemma}
 \begin{enumerate}
-\item{Stringen lager en sti mellom tilstandene.}
-\item{Anta at antall tilstander er $p$.}
-\item{Enhver string lengere enn $p$ må gå $n$ loop.}
-\item{Treffer tilstand vi har vært borte i fra før.}
+	\item{Stringen lager en sti mellom tilstandene.}
+	\item{Anta at antall tilstander er $p$.}
+	\item{Enhver string lengere enn $p$ må gå $n$ loop.}
+	\item{Treffer tilstand vi har vært borte i fra før.}
 \end{enumerate}
 
 \theoremstyle{mytheoremstyle}
@@ -340,7 +340,7 @@ Starten er en starttilstand og en tom stakk. Transisjoner er som følger:
 
 \begin{center}
 \begin{tikzpicture}[->,auto,node distance=2.8cm,line width=0.2mm]
-  \node[state] 				(A)                 	{};
+  \node[state] 				(A)             		    	{};
   \node[state]         			(B) [right of=A] 	{};
 
   \path 	(A) edge node {$r,s \rightarrow t$} (B);
@@ -349,29 +349,29 @@ Starten er en starttilstand og en tom stakk. Transisjoner er som følger:
 
 Hvor $r,s$ er forutsetninger og $t$ er aksjonen. Deler dette opp i to:
 \begin{enumerate}
-\item{Vokter: symbol lest, symbol øverst på stakken/tas av på stakken.}
-\item{Aksjon: nytt symbol på stakken.}
+	\item{Vokter: symbol lest, symbol øverst på stakken/tas av på stakken.}
+	\item{Aksjon: nytt symbol på stakken.}
 \end{enumerate}
 
 Bruker også $\varepsilon$. Akseptering skjer med aksepterende tilstand eller en tom stakk.
 
 \subsubsection{Chomskys normalform}
 \begin{itemize}
-\item{Enhver CFG kan skrives ved bruk av regler: $A \longrightarrow BC$, $D \longrightarrow d$}
-\item{Forgrening for variable.}
-\item{Unært (rett fram) for terminaler.}
+	\item{Enhver CFG kan skrives ved bruk av regler: $A \longrightarrow BC$, $D \longrightarrow d$}
+	\item{Forgrening for variable.}
+	\item{Unært (rett fram) for terminaler.}
 \end{itemize}
 
 \section{Regulære Uttrykk}
 Ta $\Sigma = \{a,b\}$. De regulære uttrykkene gir delmengder av stringer i $\{a, b\}$.
 \begin{itemize}
-\item{$\emptyset$ -- tom delmengde.}
-\item{$\epsilon$ -- $\{\epsilon\}$}
-\item{a -- \{a\}}
-\item{b -- \{b\}}
-\item{union}
-\item{konkatinering}
-\item{kleene stjerne}
+	\item{$\emptyset$ -- tom delmengde.}
+	\item{$\epsilon$ -- $\{\epsilon\}$}
+	\item{a -- \{a\}}
+	\item{b -- \{b\}}
+	\item{union}
+	\item{konkatinering}
+	\item{kleene stjerne}
 \end{itemize}
 
 Et regulært språk er en delmengde av stringen som en DFA kan akseptere. Regulære uttrykk = regulære språk.
@@ -381,15 +381,15 @@ Et regulært språk er en delmengde av stringen som en DFA kan akseptere. Regul�
 \begin{figure}[h!]
 \centering
 \begin{tikzpicture}[->,auto,node distance=3cm,line width=0.2mm]
-  \node[initial,state] 			(A)                 		{};
-  \node[state]         			(B) [right of=A] 		{};
+  \node[initial,state] 			(A)             		    		{};
+  \node[state]         				(B) [right of=A] 		{};
   \node[state,accepting]			(C) [right of=B]	 	{};
 
-  \path 	(A) edge [bend left] node {a} (B)
+  \path 	(A) edge [bend left] node 	{a} (B)
 			edge [loop above] node {b} (C)
-        	(B) edge [bend left] node {a} (A)
-			edge [bend left] node {b} (C)
-		(C)	edge [bend left] node {a,b} (B);
+       	 	(B) edge [bend left] node	{a} (A)
+			edge [bend left] node 	{b} (C)
+		(C)	edge [bend left] node 	{a,b} (B);
 \end{tikzpicture}
 \end{figure}
 
@@ -399,19 +399,19 @@ Trenger fire steg:
 \begin{figure}[h!]
 \centering
 \begin{tikzpicture}[->,auto,node distance=2cm,line width=0.2mm]
-  \node[state,initial] 			(A)                 		{};
-  \node[state]         			(B) [right of=A] 		{};
+  \node[state,initial] 			(A)                 			{};
+  \node[state]         				(B) [right of=A] 		{};
   \node[state]					(C) [right of=B]	 	{};
   \node[state]					(D) [right of=C]	 	{};
   \node[state,accepting]			(E) [right of=D]	 	{};
 
-  \path 	(A) edge node {$\varepsilon$} (B)
-		(B)	edge [loop above] node {b} (B)
-        	(B) edge [bend left] node {a} (C)
-		(C)	edge [bend left] node {a} (B)
-		(C)	edge [bend left] node {b} (D)
-		(D)	edge [bend left] node {a,b} (C)
-			edge node {$\varepsilon$} (E);
+  \path 	(A) edge node 			{$\varepsilon$} 	(B)
+		(B)	edge [loop above] node {b} 				(B)
+        		(B) edge [bend left] node 	{a} 				(C)
+		(C)	edge [bend left] node 	{a} 				(B)
+		(C)	edge [bend left] node 	{b} 				(D)
+		(D)	edge [bend left] node 	{a,b} 			(C)
+			edge node 			{$\varepsilon$} 	(E);
 \end{tikzpicture}
 \end{figure}
 
@@ -419,12 +419,12 @@ Trenger fire steg:
 \begin{figure}[h!]
 \centering
 \begin{tikzpicture}[->,auto,node distance=4cm,line width=0.2mm]
-  \node[state,initial] 			(A)                 		{};
-  \node[state]         			(B) [right of=A] 		{};
+  \node[state,initial] 			(A)                 			{};
+  \node[state]         				(B) [right of=A] 		{};
   \node[state]					(C) [right of=B]	 	{};
   \node[state,accepting]			(D) [right of=C]	 	{};
 
-  \path 	(A) edge node {$\varepsilon (b)^*a(a(b)^*a)^*$} (B)
+  \path 	(A) 	edge node {$\varepsilon (b)^*a(a(b)^*a)^*$} (B)
 		(B)	edge [bend left] node {b} (C)
 		(C)	edge [bend left] node {a,b} (B)
 		(C)	edge node {$\varepsilon$} (D);
@@ -435,12 +435,12 @@ Trenger fire steg:
 \begin{figure}[h!]
 \centering
 \begin{tikzpicture}[->,auto,node distance=6cm,line width=0.2mm]
-  \node[state,initial] 			(A)                 		{};
-  \node[state]         			(B) [right of=A] 		{};
+  \node[state,initial] 			(A)          		       		{};
+  \node[state]         				(B) [right of=A] 		{};
   \node[state,accepting]			(C) [right of=B]	 	{};
 
   \path 	(A) edge node {$\varepsilon (b)^*a(a(b)^*a)^*b((a \vee b)b)^*$} (B)
-		(B)	edge node {$\varepsilon$} (C);
+		(B) edge node {$\varepsilon$} (C);
 \end{tikzpicture}
 \end{figure}
 
@@ -449,7 +449,7 @@ Trenger fire steg:
 \centering
 \begin{tikzpicture}[->,auto,node distance=6.5cm,line width=0.2mm]
   \node[state,initial] 			(A)                 		{};
-  \node[state,accepting]         	(B) [right of=A] 		{};
+  \node[state,accepting]        		(B) [right of=A] 	{};
 
   \path 	(A) edge node {$\varepsilon (b)^*a(a(b)^*a)^*b((a \vee b)b)^*\varepsilon$} (B);
 \end{tikzpicture}
@@ -462,13 +462,13 @@ Vi får da det hele regulære uttrykket: $$\epsilon(b)^*a(a(b)^*a)^*b((a \vee b)
 \begin{figure}[h!]
 \centering
 \begin{tikzpicture}[->,auto,node distance=5cm,line width=0.2mm]
-  \node[state] 	(A)                 		{};
+  \node[state] 		(A)                 			{};
   \node[state]      	(B) [right of=A] 		{};
   \node[state]		(C) [above right of=A] 	{};
 
   \path 	(A) edge node {T} (B)
 			edge node {S} (C)
-        	(B) edge node {V} (C)
+        		(B) edge node {V} (C)
 		(C) edge [loop above] node {U} (C);
 \end{tikzpicture}
 \caption{En NFA.}
@@ -478,7 +478,7 @@ Vi får da det hele regulære uttrykket: $$\epsilon(b)^*a(a(b)^*a)^*b((a \vee b)
 \begin{figure}[h!]
 \centering
 \begin{tikzpicture}[->,auto,node distance=5cm,line width=0.2mm]
-  \node[state] 	(A)                 		{};
+  \node[state] 		(A)                 			{};
   \node[state]      	(B) [right of=A] 		{};
 
   \path 	(A) edge node {S $\vee$ TU$^*$V} (B);
@@ -489,19 +489,19 @@ Vi får da det hele regulære uttrykket: $$\epsilon(b)^*a(a(b)^*a)^*b((a \vee b)
 
 \section{Kontekstfrie språk}
 \begin{enumerate}
-\item{Gramatikk -- CFG -- kontekstfire språk.}
-\item{Automat med stakk -- PDA -- pushdown automata.}
+	\item{Gramatikk -- CFG -- kontekstfire språk.}
+	\item{Automat med stakk -- PDA -- pushdown automata.}
 \end{enumerate}
 
 \paragraph{Eksempel på CFG}
 Språk: $(((())))$
 
 \begin{itemize}
-\item{Variable: $S$ og $A$.}
-\item{Terminaler: $($ og $)$.}
-\item{Startsymbol: $S$.}
-\item{Regler (omskrivningsregler): $S \rightarrow A$, $A \rightarrow AA$, $A \rightarrow (A)$, $A \rightarrow ()$}
-\item{Utledning: 
+	\item{Variable: $S$ og $A$.}
+	\item{Terminaler: $($ og $)$.}
+	\item{Startsymbol: $S$.}
+	\item{Regler (omskrivningsregler): $S \rightarrow A$, $A \rightarrow AA$, $A \rightarrow (A)$, $A \rightarrow ()$}
+	\item{Utledning: 
 \begin{spacing}{0.4}$$ S $$
 $$\line(1,0){30}$$
 $$ A $$
@@ -552,10 +552,10 @@ Beregninger på rutepapir. Trenger ekstra blanke ruter. Tillater flere tilstande
 \subsection{Turing maskinen}
 Forskjellen mellom en finite automata og en turing maskin er:
 \begin{itemize}
-\item{En turing maskin kan både lese og skrive til og fra en tape.}
-\item{Lese-/skrivehodet kan bevege seg til både høyre og venstre.}
-\item{Tapen er uendelig.}
-\item{Aksepterende og avvisende tilstand trår i kraft umiddelbart.}
+	\item{En turing maskin kan både lese og skrive til og fra en tape.}
+	\item{Lese-/skrivehodet kan bevege seg til både høyre og venstre.}
+	\item{Tapen er uendelig.}
+	\item{Aksepterende og avvisende tilstand trår i kraft umiddelbart.}
 \end{itemize}
 
 \begin{center}
@@ -580,12 +580,12 @@ Tapen er den horisontale raden og aktiv rute er markert med rød. Tid er x-aksen
 \begin{figure}[h!]
 \centering
 \begin{tikzpicture}[->,auto,node distance=4cm,line width=0.2mm]
-  \node[initial,state] 		(A)                    	{$Q_1$};
-  \node[state]         		(B) [right of=A] 	{$Q_2$};
+  \node[initial,state] 		(A)                   	 	{$Q_1$};
+  \node[state]         			(B) [right of=A] 	{$Q_2$};
 
   \path 	(A) edge [bend left] node {H $\rightarrow$ 1,R} (B)
 		(A) edge [loop above] node {1 $\rightarrow$ H,L} (A)
-        	(B) edge [bend left] node {H $\rightarrow$ 1,L} (A)
+        		(B) edge [bend left] node {H $\rightarrow$ 1,L} (A)
 		(B) edge [loop above] node {1 $\rightarrow$ H,R} (B);
 \end{tikzpicture}
 \caption{Eksempel på en Turing maskin.}
@@ -598,13 +598,13 @@ I eksempel 10 ser vi en TM med to tilstander: $Q_1$ og $Q_2$. Denne tar enten in
 \begin{tm}
 En \textbf{TM} er et 7-tuppel $(Q, \Sigma, \Gamma, \delta, q_0, q_{accept}, q_{reject})$
 \begin{enumerate}
-\item{$Q$ er tilstandene,}
-\item{$\Sigma$ er input alfabetet som ikke holder blanke,}
-\item{$\Gamma$ er alfabetet på tapen -- inkludert blanke,}
-\item{$\delta : Q \times \Gamma \rightarrow Q \times \Gamma \times \{L, R\}$ er funksjonen for transisjonene,}
-\item{$q_0 \in Q$ er starttilstanden,}
-\item{$q_{accept} \in Q$ er aksepterende tilstand, og}
-\item{$q_{reject} \in Q$ er avvist tilstand. Hvor $q_{reject} \neq q_{accept}$}.
+	\item{$Q$ er tilstandene,}
+	\item{$\Sigma$ er input alfabetet som ikke holder blanke,}
+	\item{$\Gamma$ er alfabetet på tapen -- inkludert blanke,}
+	\item{$\delta : Q \times \Gamma \rightarrow Q \times \Gamma \times \{L, R\}$ er funksjonen for transisjonene,}
+	\item{$q_0 \in Q$ er starttilstanden,}
+	\item{$q_{accept} \in Q$ er aksepterende tilstand, og}
+	\item{$q_{reject} \in Q$ er avvist tilstand. Hvor $q_{reject} \neq q_{accept}$}.
 \end{enumerate}
 \end{tm}
 
@@ -619,9 +619,9 @@ Startkonfigurasjonen for $\mathcal{M}$ på input $w$ er konfigurasjonen $q_0w$, 
 
 En TM $\mathcal{M}$ aksepterer input $w$ hvis en sekvens av konfigurasjoner $C_1, C_2, \dots,C_k$ eksisterer, hvor:
 \begin{enumerate}
-\item{$C_1$ er startkonfigurasjonen på input $w$,}
-\item{hver $C_i$ gir $C_{i+1}$, og}
-\item{$C_k$ er en aksepterende konfigurasjon.}
+	\item{$C_1$ er startkonfigurasjonen på input $w$,}
+	\item{hver $C_i$ gir $C_{i+1}$, og}
+	\item{$C_k$ er en aksepterende konfigurasjon.}
 \end{enumerate}
 
 \subsubsection{Grunnleggende Turing maskiner}
@@ -634,7 +634,7 @@ En TM $\mathcal{M}$ aksepterer input $w$ hvis en sekvens av konfigurasjoner $C_1
 \begin{figure}[h!]
 \centering
 \begin{tikzpicture}[->,auto,node distance=3cm,line width=0.2mm]
-  \node[initial,state] 		(A)                    	{};
+  \node[initial,state] 	(A)	                    	{};
   \node[state]         		(B) [right of=A] 	{};
   \node[state]         		(C) [right of=B] 	{};
   \node[state]         		(D) [right of=C] 	{};
@@ -642,7 +642,7 @@ En TM $\mathcal{M}$ aksepterer input $w$ hvis en sekvens av konfigurasjoner $C_1
 
   \path 	(A) edge node {0 $\rightarrow$ a,R} (B)
 		(B) edge node {0 $\rightarrow$ b,R} (C)
-        	(C) edge node {0 $\rightarrow$ b,R} (D)
+       	 	(C) edge node {0 $\rightarrow$ b,R} (D)
 		(D) edge node {0 $\rightarrow$ a,R} (E);
 \end{tikzpicture}
 \end{figure}
@@ -655,8 +655,8 @@ En TM $\mathcal{M}$ aksepterer input $w$ hvis en sekvens av konfigurasjoner $C_1
 \begin{figure}[h!]
 \centering
 \begin{tikzpicture}[->,auto,node distance=3cm,line width=0.2mm]
-  \node[initial,state] 		(A)                    	{};
-  \node[state]         		(B) [right of=A] 	{H};
+  \node[initial,state] 		(A)                    		{};
+  \node[state]         			(B) [right of=A] 	{H};
 
   \path 	(A) edge [loop above] node {a $\rightarrow$ b,R} (A)
 		(A) edge [loop below] node {b $\rightarrow$ a,R} (A)
@@ -684,8 +684,8 @@ Bever funksjonen: $\beta(1) = 1, \beta(2) = 4, \beta(3) = 6, \beta(4) = 13, \bet
 \begin{figure}[h!]
 \centering
 \begin{tikzpicture}[->,auto,node distance=3cm,line width=0.2mm]
-  \node[initial,state] 		(A)                    	{};
-  \node[state]         		(B) [right of=A] 	{H};
+  \node[initial,state] 		(A)               	     	{};
+  \node[state]         			(B) [right of=A] 	{H};
 
   \path 	(A) edge node {1,0 $\rightarrow$ 1,R} (B);
 \end{tikzpicture}
@@ -695,9 +695,9 @@ Bever funksjonen: $\beta(1) = 1, \beta(2) = 4, \beta(3) = 6, \beta(4) = 13, \bet
 \begin{figure}[h!]
 \centering
 \begin{tikzpicture}[->,auto,node distance=4cm,line width=0.2mm]
-  \node[initial,state] 		(A)                    	{};
-  \node[state] 			(B) [right of=A]    	{};
-  \node[state]         		(C) [right of=B] 	{H};
+  \node[initial,state] 		(A)                 	   	{};
+  \node[state] 				(B) [right of=A]    	{};
+  \node[state]         			(C) [right of=B] 	{H};
 
   \path 	(A) edge node {1 $\rightarrow$ 1,R} (B)
 		(A) edge [bend left] node {0 $\rightarrow$ 1,R} (B)
@@ -710,10 +710,10 @@ Bever funksjonen: $\beta(1) = 1, \beta(2) = 4, \beta(3) = 6, \beta(4) = 13, \bet
 \begin{figure}[h!]
 \centering
 \begin{tikzpicture}[->,auto,node distance=4cm,line width=0.2mm]
-  \node[initial,state] 		(A)                    	{};
-  \node[state] 			(B) [right of=A]    	{};
-  \node[state] 			(C) [right of=B]    	{};
-  \node[state]         		(D) [right of=C] 	{H};
+  \node[initial,state] 		(A)                 	   	{};
+  \node[state] 				(B) [right of=A]    	{};
+  \node[state] 				(C) [right of=B]    	{};
+  \node[state]         			(D) [right of=C] 	{H};
 
   \path 	(A) edge node {0 $\rightarrow$ 1,R} (B)
 		(A) edge [bend left] node {1 $\rightarrow$ 1,L} (C)
@@ -728,11 +728,11 @@ Bever funksjonen: $\beta(1) = 1, \beta(2) = 4, \beta(3) = 6, \beta(4) = 13, \bet
 \begin{figure}[h!]
 \centering
 \begin{tikzpicture}[->,auto,node distance=4cm,line width=0.2mm]
-  \node[initial,state] 		(A)                    	{};
-  \node[state] 			(B) [below of=A]   	{};
-  \node[state] 			(C) [right of=A]    	{};
-  \node[state] 			(D) [below of=C]   {};
-  \node[state]         		(E) [right of=D] 	{H};
+  \node[initial,state] 		(A)            		        	{};
+  \node[state] 				(B) [below of=A]   	{};
+  \node[state] 				(C) [right of=A]    	{};
+  \node[state] 				(D) [below of=C] 	{};
+  \node[state]         			(E) [right of=D] 	{H};
 
   \path 	(A) edge node {1 $\rightarrow$ 1,L} (C)
 		(A) edge [bend left] node {0 $\rightarrow$ 1,R} (C)
@@ -943,8 +943,8 @@ $HAMPATH = \{\langle \mathcal{G},s,t\rangle | \mathcal{G}$ er en rettet graf med
 \centering
 \begin{tikzpicture}[->,auto,node distance=4cm,line width=0.2mm]
   \tikzstyle{selected edge} = [draw,line width=1.5pt,-,red!50]
-  \node[state] 			(A)                   	 	{};
-  \node[state]         		(B) [above right of=A] 	{};
+  \node[state] 				(A)                   	 		{};
+  \node[state]         			(B) [above right of=A] 	{};
   \node[state]				(C) [below right of=A]	{};
   \node[state]				(D) [right of=C]		{};
   \node[state]				(E) [above left of=D]	{};
@@ -1047,6 +1047,7 @@ En \textbf{clique} i en urettet graf er en subgraf. En k-clique er en clique som
 	 \tikzstyle{selected vertex} = [vertex, fill=red!24]
 	 \tikzstyle{selected edge} = [draw,line width=2pt,-,red!100]
 	 \tikzstyle{edge} = [draw,thick,-,black]
+
 	 \node[vertex] (v0) at (0,0) {};
 	 \node[vertex] (v1) at (0,1) {};
 	 \node[vertex] (v2) at (1,0) {};
@@ -1054,6 +1055,7 @@ En \textbf{clique} i en urettet graf er en subgraf. En k-clique er en clique som
 	 \node[vertex] (v4) at (2,1) {};
 	 \node[vertex] (v5) at (2,0) {};
 	 \node[vertex] (v6) at (0.5,0.5) {};
+
 	 \draw[edge] (v0) -- (v1) -- (v3) -- (v2) -- (v5) -- (v4) -- (v3) -- (v2) -- (v0); 
 	 \draw[edge] (v6) -- (v0) -- (v6) -- (v1) -- (v6) -- (v2) -- (v6) -- (v3) -- (v6) -- (v4) -- (v6) -- (v5);
 	 \draw[edge] (v2) -- (v4) -- (v5) -- (v3);
