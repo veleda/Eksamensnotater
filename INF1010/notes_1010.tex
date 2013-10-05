@@ -1,0 +1,206 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{mathtools}
+\usepackage{amssymb}
+\usepackage[norsk]{babel}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{courier}
+
+\usepackage{listings}
+\usepackage{color}
+\usetikzlibrary{trees}
+
+
+\newcommand{\intt}{integritetsregler}
+\newcommand{\inttt}{integritetsregel}
+\newcommand{\Intt}{Integritetsregler}
+ 
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+
+\lstset{ %
+  language=Java,                % the language of the code
+  basicstyle=\small\ttfamily,           % the size of the fonts that are used for the code
+  numbers=left,                   % where to put the line-numbers
+  numberstyle=\small\color{gray},  % the style that is used for the line-numbers
+  stepnumber=1,                   % the step between two line-numbers. If it's 1, each line 
+                                  % will be numbered
+  numbersep=5pt,                  % how far the line-numbers are from the code
+  backgroundcolor=\color{white},      % choose the background color. You must add \usepackage{color}
+  showspaces=false,               % show spaces adding particular underscores
+  showstringspaces=false,         % underline spaces within strings
+  showtabs=false,                 % show tabs within strings adding particular underscores
+  frame=none,                   % adds a frame around the code
+  rulecolor=\color{black},        % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. commens (green here))
+  tabsize=2,                      % sets default tabsize to 2 spaces
+  captionpos=b,                   % sets the caption-position to bottom
+  breaklines=true,                % sets automatic line breaking
+  breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
+  title=\lstname,                   % show the filename of files included with \lstinputlisting;
+                                  % also try caption instead of title
+  keywordstyle=\color{blue},          % keyword style
+  commentstyle=\color{dkgreen},       % comment style
+  stringstyle=\color{mauve},         % string literal style
+  escapeinside={\%*}{*)},            % if you want to add LaTeX within your code
+  morekeywords={*,...}               % if you want to add more keywords to the set
+}
+
+\title{Notater: INF1010}
+\author{Veronika Heimsbakk \\ 
+veronahe@student.matnat.uio.no}
+\begin{document}
+
+\maketitle{}
+
+\section{Tilgangsnivåer}
+\begin{center}
+\begin{tabular}{l c c c c}
+\textbf{Modifier} & \textbf{Class} & \textbf{Package} & \textbf{Subclass} & \textbf{World}\\
+\textit{public} & Y & Y & Y & Y\\
+\textit{protected} & Y & Y & Y & N\\
+\textit{no modifier} & Y & Y & N & N\\
+\textit{private} & Y & N & N & N\\
+\end{tabular}
+\end{center}
+
+\section{CompareTo}
+I interfacet Compareable ligger metoden \texttt{compareTo} som er fin å bruke i sammenheng med bl.a. generiske typer ved sortering.
+
+\begin{center}
+\begin{tabular}{ll}
+Mindre enn & negativ verdi\\
+Like & 0\\
+Større enn & positiv verdi\\
+\end{tabular}
+\end{center}
+
+\section{Invariant}
+Et predikat (boolsk verdi) er kalt en \textit{invariant} til en sekvens av operasjoner når: predikatet er \texttt{true} \textit{før} sekvensen startes, da er det \texttt{true} på slutten av sekvensen også.
+
+\section{for-each}
+\begin{lstlisting}
+public metodeNavn (Integer[] i) {
+	for (Integer x : i) { // cruiser gjennom arrayen
+		whatToDo;
+	}
+}
+\end{lstlisting}
+
+\section{Subklasser}
+\lstinputlisting{code/subklasse.java}
+
+\section{Lenkede lister}
+Eksempel på lister er: filer, arrayer, lister, FIFO og LIFO.
+
+\subsection{Innsetting}
+Tenke på om lista skal være FIFO (First In First Out) eller LIFO (Last In First Out).
+\subsubsection{FIFO}
+\lstinputlisting{code/settinnFIFO.java}
+\subsubsection{LIFO}
+\lstinputlisting{code/settinnLIFO.java}
+\subsubsection{Legge til et objekt med attributter}
+\lstinputlisting{code/leggetil.java}
+
+\subsection{Fjerne et objekt}
+\lstinputlisting{code/fjern.java}
+
+\section{Interface, generiske typer og abstract}
+\subsection{Interface}
+Man bruker interface på en klasse om man ønsker egenskaper som flere forskjellige klasser skal arve. Metodene som interfacet inneholder på implementeres på nytt hver gang det interfacet implementeres.
+
+
+\begin{lstlisting}
+interface Name {
+	method();
+	type varName = value;
+}
+\end{lstlisting}
+Dette implementeres ved å si:
+\begin{lstlisting}
+class className implements Name {. . .}
+\end{lstlisting}
+
+Variabler i et interface vil være public, static og final.
+
+\subsection{Abstract}
+Når en klasse er abstract, så kan man bare lage objekter av subklassene til denne klassen. 
+
+\subsection{Generiske typer}
+Dette er objektholdere som kan inneholde hva som helst. Men hvis den generiske typen extender en klasse, så kan man kun legge inn objekter av den klassen eller klasser som extender den respektive klassen.
+
+\subsubsection{Generiske metoder}
+En generisk metode må ha \texttt{<E>} (eller hvilken som helst annen bokstav) foran typen sin:
+\begin{lstlisting}
+public <E> void printNoe (E[] x) {
+	for (E e : x) {
+		System.out.println(e); // printer hele arrayen
+	}
+}
+\end{lstlisting}
+
+\subsubsection{Generiske returneringstyper}
+I dette eksempelet skal man finne største verdi av tre generiske saker.
+\lstinputlisting{code/generic.java}
+
+\subsection{Eksempel med noder, interface og generiske typer}
+\lstinputlisting{code/node.java}
+
+\section{Iterator}
+\lstinputlisting{code/iterator.java}
+
+\section{Tråder}
+\lstinputlisting{code/traad.java}
+Nøkkelordet \texttt{synchronized} gjør at kun en tråd kan jobbe på metoden av gangen.
+
+\section{GUI}
+\lstinputlisting{code/gui.java}
+\subsection{Komponenter}
+\lstinputlisting{code/komp.java}
+\subsection{Action Listener}
+\lstinputlisting{code/listen.java}
+
+\section{Binære trær}
+% Set the overall layout of the tree
+\tikzstyle{level 1}=[level distance=1cm, sibling distance=2cm]
+\tikzstyle{level 2}=[level distance=1cm, sibling distance=2cm]
+
+% Define styles for bags and leafs
+\tikzstyle{bag} = [text width=4em, text centered]
+\tikzstyle{end} = [circle, minimum width=3pt,fill, inner sep=0pt]
+\begin{center}
+\begin{tikzpicture}[grow=down, sloped]
+\node[bag] {8}
+    child {
+        node[bag] {3}
+		child { node[] {1} } 
+		child { node[] {6} }         
+    }
+   child { node[] {10}
+};
+\end{tikzpicture}
+\end{center}
+
+Binære trær har på det meste to child-noder. Et sortert binært tre har alltid større verdi enn foreldrenoden til høyre og den mindre verdien i ventre node. Det lille treet over er sortert.
+
+\subsection{Iterering}
+\begin{itemize}
+\item{Pre-order: root, venstre barn, høyre barn}
+\item{In-order: venstre barn, root, høyre barn}
+\item{Post-order: venstre barn, høyre barn, root}
+\end{itemize}
+
+\subsection{Eksempel på binær tre}
+\subsubsection{Innsetting}
+\lstinputlisting{code/tre_legginn.java}
+
+\subsubsection{Fjerne}
+\lstinputlisting{code/tre_fjerne.java}
+
+\subsubsection{Traversering}
+\lstinputlisting{code/traversering.java}
+
+
+\end{document}
