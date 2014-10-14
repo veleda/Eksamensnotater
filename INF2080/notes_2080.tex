@@ -941,39 +941,38 @@ $HAMPATH = \{\langle \mathcal{G},s,t\rangle | \mathcal{G}$ er en rettet graf med
 
 \begin{figure}[h!]
 \centering
-\begin{tikzpicture}[->,auto,node distance=4cm,line width=0.2mm]
-  \tikzstyle{selected edge} = [draw,line width=1.5pt,-,red!50]
-  \node[state] 				(A)                   	 		{};
-  \node[state]         			(B) [above right of=A] 	{};
-  \node[state]				(C) [below right of=A]	{};
-  \node[state]				(D) [right of=C]		{};
-  \node[state]				(E) [above left of=D]	{};
-  \node[state]				(F) [below right of=B]	{};
-  \node[state]				(G) [right of=B]		{};
-  \node[state]				(I) [below right of=G]	{};
+\begin{tikzpicture}
+	\tikzstyle{vertex} = [circle, fill=black!70, inner sep=5pt]
+	\tikzstyle{edge} = [black, ->, thick]
+	\tikzstyle{selected edge} = [red, ->, thick]
 
-  \path 	(A) edge node {} (B);
-  \path 	(A) edge node {} (C);
-  \path 	(B) edge node {} (C);
-  \path 	(C) edge node {} (E);
-  \path 	(E) edge node {} (F);
-  \path 	(F) edge node {} (B);
-  \path 	(C) edge node {} (D);
-  \path 	(E) edge node {} (D);
-  \path 	(G) edge node {} (D);
-  \path 	(G) edge node {} (I);
-  \path 	(D) edge node {} (I);
-  \path 	(B) edge node {} (G);
+	\node[vertex] (1) at (0,0) {};
+	\node[vertex] (2) at (3,0) {};
+	\node[vertex] (3) at (0,3) {};
+	\node[vertex] (4) at (3,3) {};
+	\node[vertex] (5) at (-1.5,1.5) {};
+	\node[vertex] (6) at (4.5, 1.5) {};
+	\node[vertex] (7) at (0.8,1.5) {};
+	\node[vertex] (8) at (2.2,1.5) {};
 
-	 \draw[selected edge] (A) -- (C);
-	 \draw[selected edge] (C) -- (E);
-	 \draw[selected edge] (E) -- (F);
-	 \draw[selected edge] (B) -- (G);
-	 \draw[selected edge] (G) -- (D);
-	 \draw[selected edge] (D) -- (I);
+	\draw[selected edge] (5) -- (1);
+	\draw[edge] (5) -- (3);
+	\draw[edge] (3) -- (1);
+	\draw[edge] (3) -- (4);
+	\draw[selected edge] (1) -- (7);
+	\draw[edge] (1) -- (2);
+	\draw[selected edge] (7) -- (8);
+	\draw[edge] (7) -- (2);
+	\draw[edge] (8) -- (3);
+	\draw[selected edge] (4) -- (2);
+	\draw[edge] (4) -- (6);
+	\draw[selected edge] (2) -- (6);
 \end{tikzpicture}
 \caption{Graf med Hamilton-sti.}
 \end{figure}
+
+
+
 
 Vi kan enkelt få til eksponentiell-tid algoritme for $HAMPATH$-problemet ved å modifisere brute-force algoritmen for $PATH$. Vi trenger bare å bekrefte at stien er en Hamilton-sti. Ingen vet om den er løselig i polynom-tid.
 
