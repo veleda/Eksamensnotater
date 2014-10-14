@@ -246,18 +246,18 @@ Hva nå om vi vil slå sammen disse to, og ha en automat som gjenkjenner minst t
 \begin{figure}[h!]
 \centering
 \begin{tikzpicture}[->,auto,node distance=4cm,line width=0.2mm,every state/.style={scale=0.7}]
-	\node[initial,state] 				(A)		                 		{$<q_1, p_1>$};
-	\node[state]         				(B) [above right of=A] 	{$<q_2, p_1>$};
-	\node[state]					(C) [below right of=A] 	{$<q_1, p_2>$};
-	\node[state]					(D) [below of=C]		{$<q_1, p_3>$};
-	\node[state]					(E) [above right of=D]	{$<q_2, p_3>$};
-	\node[state]					(F) [below right of=E]	{$<q_3, p_3>$};
-	\node[state,accepting]			(G) [above right of=F]	{$<q_4, p_3>$};
-	\node[state]					(H) [above of=G]		{$<q_4, p_2>$};
-	\node[state]					(I) [left of=H]			{$<q_3, p_2>$};
-	\node[state]					(J) [left of=I]			{$<q_2, p_2>$};
-	\node[state]					(K) [above right of=B]	{$<q_3, p_1>$};
-	\node[state]					(L) [right of=K]		{$<q_4, p_1>$};
+	\node[initial,state] 			(A)		                 	{$<q_1, p_1>$};
+	\node[state]         				(B) [right of=A] 	{$<q_2, p_1>$};
+	\node[state]					(C) [below of=A] 	{$<q_1, p_2>$};
+	\node[state]					(D) [below of=C]	{$<q_1, p_3>$};
+	\node[state]					(E) [right of=D]	{$<q_2, p_3>$};
+	\node[state]					(F) [right of=E]	{$<q_3, p_3>$};
+	\node[state,accepting]		(G) [right of=F]	{$<q_4, p_3>$};
+	\node[state]					(J) [right of=C]	{$<q_2, p_2>$};
+	\node[state]					(I) [right of=J]	{$<q_3, p_2>$};
+	\node[state]					(H) [right of=I]	{$<q_4, p_2>$};
+	\node[state]					(K) [right of=B]	{$<q_3, p_1>$};
+	\node[state]					(L) [right of=K]	{$<q_4, p_1>$};
 
   	\path 	(A) edge node 				{a} 	(B)
 				edge node 				{b} 	(C)
