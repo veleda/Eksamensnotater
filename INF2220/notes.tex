@@ -36,8 +36,8 @@
 
 \lstset{ %
   language=Java,                % the language of the code
-  basicstyle=\small,           % the size of the fonts that are used for the code
-  numbers=left,                   % where to put the line-numbers
+  basicstyle=\small\rmfamily,           % the size of the fonts that are used for the code
+  numbers=none,                   % where to put the line-numbers
   numberstyle=\small\color{gray},  % the style that is used for the line-numbers
   stepnumber=1,                   % the step between two line-numbers. If it's 1, each line 
                                   % will be numbered
@@ -46,32 +46,38 @@
   showspaces=false,               % show spaces adding particular underscores
   showstringspaces=false,         % underline spaces within strings
   showtabs=false,                 % show tabs within strings adding particular underscores
-  frame=none,                   % adds a frame around the code
-  rulecolor=\color{black},        % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. commens (green here))
+  frame=,                   % adds a frame around the code
+  rulecolor=\color{gray},        % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. commens (green here))
   tabsize=2,                      % sets default tabsize to 2 spaces
   captionpos=b,                   % sets the caption-position to bottom
   breaklines=true,                % sets automatic line breaking
   breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
   title=\lstname,                   % show the filename of files included with \lstinputlisting;
                                   % also try caption instead of title
-  keywordstyle=\color{blue},          % keyword style
+  keywordstyle=\bfseries\color{black},          % keyword style
   commentstyle=\color{dkgreen},       % comment style
   stringstyle=\color{mauve},         % string literal style
   escapeinside={\%*}{*)},            % if you want to add LaTeX within your code
-  morekeywords={*,...}               % if you want to add more keywords to the set
+  morekeywords={*,..,}               % if you want to add more keywords to the set
 }
 
 \setlength{\parskip}{5mm}
 
-\newtheoremstyle{mytheoremstyle} 	% name
-    {\topsep}                    			% Space above
-    {\topsep}                    			% Space below
-    {\itshape}                   			% Body font
-    {}                           			% Indent amount
-    {\scshape}                   			% Theorem head font
-    {.}                          			% Punctuation after theorem head
-    {.5em}                       			% Space after theorem head
-    {} 				 			% Theorem head spec (can be left empty, meaning ‘normal’)
+\newtheoremstyle{def}
+	{3pt}	% Space above
+	{3pt}	% Space below
+	{\itshape}		% Font
+	{}		% Indent
+	{\bfseries}		% Head font
+	{:}		% Head punct.
+	{.5em}	% Space after head
+	{}		% Head spec
+
+\theoremstyle{def}
+\newtheorem{definition}[subsection]{Definisjon}
+
+%\newenvironment{definition}[1][Definisjon]{\begin{trivlist}
+%\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
 
 \title{Notater: INF2220}
 \author{Veronika Heimsbakk \\ 
@@ -88,15 +94,13 @@ Dette er notater til kurset INF2220--Algoritmer og datastrukturer ved Universite
 
 %%% KJØRETID %%%
 \section{Kjøretid}
-Ettersom kjøretiden til algoritmer som regel er et veldig komplekst uttrykk, så holder det at denne estimeres. Denne typen estimering kalles \textbf{asymptotic analysis}, eller \textbf{big-O} notasjon.
 
-\theoremstyle{mytheoremstyle}
-\newtheorem{onotasjon}{Definisjon}[section]
-\begin{onotasjon}
+\begin{definition}
+\emph{\textbf{O-notasjon}}
 La $f$ og $g$ være funksjoner $f,g: \mathcal{N} \rightarrow \mathcal{R}^+$. Sier at $\textbf{f(n) = O(g(n))}$ hvis det eksisterer positive heltall $c$ og $n_0$ slik at for hvert heltall $n \geq n_0$,
 $$f(n) \leq c g(n).$$
 Når $f(n) = O(g(n))$, sier vi at $g(n)$ er \textbf{upper bound} for $f(n)$, eller mer presist at $g(n)$ er \textbf{asymptotic upper bound} for $f(n)$.
-\end{onotasjon}
+\end{definition}
 
 \begin{table}[h!]
 \centering
@@ -129,47 +133,29 @@ $n!$&\\
 \draw[red, domain=0:2.2] plot (\x, {\x^2}) node[right]{$n^2$};
 \draw[blue, domain=0:3.5] plot (\x, {\x}) node[right] {$n$};
 \draw[black, domain=0:1.7] plot (\x, {\x^3}) node[right] {$n^3$};
+\draw[orange, domain=0:2.7] plot (\x, {2*\x}) node [right] {$2n$};
 \end{tikzpicture}
 \label{fig:ofunc}
 \caption{Noen funksjoner for O$(n)$.}
 \end{figure}
 
-Et eksempel på enkel beregning av kjøretid for kode er:
-\begin{lstlisting}
-// O(n)
+\subsection{Analyse av kjøretid}
+Når man analyserer en algoritme, så må man se på \textit{stegene} den bruker og analysere de hver for seg. Ta for eksempel denne kodesnutten:
+\begin{Verbatim}[frame=single]
 for (i = 0; i < n; i++)
-	array[i] = 0;
-
-// O(n^2)
-for (i = 0; i < n; i++)
-	for (j = 0; j < n; j++)
-		array[i][j] = 0;
-\end{lstlisting}
+  for (j = 0; j < m; j++)
+    array[i][j] = 0;
+\end{Verbatim}
+Her har vi to steg: løkken som går $n$ steg, og løkken som går $m$ steg. Den første løkken går i O(N), mens den andre løkken går i O(M). Siden den innerte løkken går M ganger N ganger (siden den er nestet i den ytterste løkken). Så vil den totale tiden være O(M) $\times$ O(N), dermed O$(n^2)$.
 
 
 %%% TRÆR %%%
 \section{Trær}
-\newtheorem{tre}{Definisjon}[section]
-\begin{tre}
+
+\begin{definition}
+\emph{\textbf{Tre}}
 Et \textbf{tre} er en samling \textbf{noder}. Et ikke-tomt tre består av en \textbf{rot}-node, og null eller flere ikke-tomme \textbf{subtrær}. Fra roten går en \textbf{rettet kant} til roten i hvert subtre.
-\end{tre}
-
-\begin{figure}[h!]
-\centering
-\begin{tikzpicture}[every node/.style={circle, draw=black}]
-\node{A}
-	child {node {B}}
-	child {node {C}
-		child {node {D}}
-		child {node {E}}
-	}
-;
-\end{tikzpicture}
-\label{fig:basictree}
-\caption{Eksempel på et tre.}
-\end{figure}
-
-I figur \ref{fig:basictree}, så er A rot-noden. B og C er barna til A, og C er forelder til løvnodene D og E.
+\end{definition}
 
 % Traversering
 \subsection{Traversering}
@@ -213,27 +199,48 @@ public void postOrder (Node node) {
 
 % Terminologi
 \subsection{Terminologi}
-\begin{description}
-\item[Vei] Eller en \textit{sti} fra node $n_1$ til $n_k$ er definert som en sekvens $n_1, n_2, \dots, n_k$, slik at $n_i$ er forelder til $n_{i+1}$ for $1 \leq i \leq k$.
-\item[Lengden] Lengden av veien er antall \textit{kanter} på veien; $k-1$.
-\item[Dybde] Definert av den unike veien fra roten til noden. Rotens dybde er 0.
-\item[Høyden] Definert som lengden av den \textit{lengste} veien fra noden til en løvnode. Alle løvnoder har høyde 0. Høyden til et tre er lik høyden til roten.
-\end{description}
+\begin{definition}
+\emph{\textbf{Sti}}
+En sti fra node $n_1$ til $n_k$ er definert som en sekvens $n_1, n_2, \dots, n_k$, slik at $n_i$ er forelder til $n_{i+1}$ for $1 \leq i \leq k$.
+\end{definition}
+\begin{definition}
+\emph{\textbf{Lengde}}
+Antall \textit{kanter} på veien; $k-1$.
+\end{definition}
+\begin{definition}
+\emph{\textbf{Dybde}}
+Definert av den unike veien fra roten til noden. Rotens dybde er 0.
+\end{definition}
+\begin{definition}
+\emph{\textbf{Høyde}}
+Definert som lengden av den \textit{lengste} veien fra noden til en løvnode. Alle løvnoder har høyde 0. Høyden til et tre er lik høyden til roten.
+\end{definition}
 
 
+\newpage
 %%% BINÆRTRÆR %%%
-\subsection{Binærtrær}
-I et binærtre er et tre der hver node aldri har mer enn to barn. I INF2220 er fokuset på \textit{binære søketrær}. For binære søketrær skal følgende holde for hver node i treet:
+\subsection{Binært søketre}
+
+\begin{definition}
+\emph{\textbf{Binært søketre}}
+Et binært søketre (BST) er et \textbf{ordnet} binært tre. Følgende kriterier må være oppfylt for at treet skal være et BST:
 \begin{itemize}
 \item
-Alle verdiene i \textit{venstre} subtre er \textit{mindre} enn verdien i noden selv.
+Verdiene i \textbf{venstre} subtre er \textbf{mindre} enn noden i seg selv.
 \item
-Alle verdiene i \textit{høyre} subtre er \textit{større} enn verdien i noden selv.
+Verdiene i \textbf{høyre} subtre er \textbf{større} enn noden i seg selv.
+\item
+Venstre og høyre subtre må også være binære søketrær.
+\item
+Hver node kan ha maksimum to barn.
+\item
+Det eksisterer en \textbf{unik} sti fra roten til enhver node i treet.
 \end{itemize}
+\end{definition}
 
 \begin{figure}[h!]
 \centering
-\begin{tikzpicture}[every node/.style={circle, draw=black}, 
+\begin{tikzpicture}[->,every node/.style={circle, draw=black}, 
 				   level 1/.style={sibling distance=20mm},
 				   level 2/.style={sibling distance=10mm}]
 \node{6}
@@ -251,17 +258,62 @@ Alle verdiene i \textit{høyre} subtre er \textit{større} enn verdien i noden s
 \caption{Eksempel på et binært søketre.}
 \end{figure}
 
+\subsubsection{Tidkompleksitet}
+\begin{table}[h!]
+\centering
+\begin{tabular}{rll}
+&Average&Worst case\\
+\textbf{Plass} & O($n$) & O($n$)\\
+\textbf{Søk} & O($\log n$) & O($n$)\\
+\textbf{Innsetting} & O($\log n$) & O($n$)\\
+\textbf{Sletting} & O($\log n$) & O($n$)\\
+\end{tabular}
+\label{tab:obst}
+\caption{Tidkompleksitet for BST.}
+\end{table}
+
+\newpage
+\subsubsection{Søking}
+\begin{Verbatim}[frame=single]
+function find(key, node):
+  if node = Null or node.key = key then
+    return node
+  else if key < node.key then
+    return find(key, node.left)
+  else
+    return find(key, node.right)
+\end{Verbatim}
+
+\subsubsection{Sette inn}
+\begin{Verbatim}[frame=single]
+function insert(root, data):
+  if (!root)
+    root = new Node(data)
+  else if (data < root.data)
+    insert(root.left, data)
+  else if (data > root.data)
+    insert(root.right, data)
+\end{Verbatim}
+
 \subsection{Rød-svarte trær}
-Et rød-svart tre er et binært søketre der hver node er farget enten rød eller svart slik at følgende holder:
+\begin{definition}
+\emph{\textbf{Rød-svart tre}}
+En datastruktur som er et \textbf{selv-balanserende} binært søketre. Følgende skal gjelde for et rød-svart tre:
 \begin{enumerate}
 \item
-Roten er svart.
+En node er enten rød eller sort.
 \item
-Hvis en node er rød, så må barna være svarte.
+Roten er sort.
 \item
-Enhver sti fra en node til en null-peker må inneholde samme antall svarte noder.
+Alle løvnoder (NIL) er sorte---alle løvnoder har samme farge som roten.
+\item
+Enhver røde node må ha to sorte barn.
+\item
+Enhver sti fra roten til en løvnode skal inneholde samme antall sorte noder.
 \end{enumerate}
 Dette sikrer at høyden på et slikt tre er maks $2\times\log_2(N+1)$.
+\end{definition}
+
 
 \tikzset{
 	treenode/.style = {align=center, inner sep=0pt},
@@ -273,43 +325,57 @@ Dette sikrer at høyden på et slikt tre er maks $2\times\log_2(N+1)$.
 	node_red/.style = {treenode, circle, red, draw=red,
 						text width=0.8cm, very thick},
 	% Null-pekere
-	node_null/.style = {treenode, rectangle, draw=black,
+	node_null/.style = {white, treenode, rectangle, draw=black, fill=black,
 						minimum width=0.3cm, minimum height=0.3cm}
 }
 
+
+\subsubsection{Eksempel på innsetting}
 \begin{figure}[h!]
 \centering
 \begin{tabular}{p{4cm}p{4cm}p{4cm}}
 1&2&3\\
+\scalebox{0.8}{
 \begin{tikzpicture}[level 1/.style={sibling distance=20mm},
-				   level 2/.style={sibling distance=10mm}]
+				   level 2/.style={sibling distance=10mm, level distance=10mm}]
 \node[node_black]{41}
-	child {node[node_red] {38}}
-	child {node [node_null] {}}
+	child {node[node_red] {38}
+		child {node[node_null] {nil}}
+		child {node[node_null] {nil}}
+	}
+	child {node [node_null] {nil}}
 ;
 \end{tikzpicture}
+}
 &
+\scalebox{0.8}{
 \begin{tikzpicture}[level 1/.style={sibling distance=20mm},
-				   level 2/.style={sibling distance=10mm}]
+				   level 2/.style={sibling distance=10mm, level distance=10mm}]
 \node[node_black]{38}
 	child {node[node_red] {31}}
 	child {node [node_red] {41}}
 ;
 \end{tikzpicture}
+}
 &
+\scalebox{0.8}{
 \begin{tikzpicture}[level 1/.style={sibling distance=20mm},
 				   level 2/.style={sibling distance=10mm}]
 \node[node_black]{38}
 	child {node[node_black] {31}
-		child {node[node_null] {}}
-		child {node[node_red] {12}}
+		child {node[node_null] {nil}}
+		child {node[node_red] {12}
+		}
 	}
 	child {node [node_black] {41}}
 ;
-\end{tikzpicture}\\
+\end{tikzpicture}
+}
+\\
 Setter inn 41 og 38 etter reglene. 
 & Når 31 nå kommer inn, så må vi snu på treet og farge om 38 og 41. 
 & Siden løvnodene var røde når 12 skal inn, så må 31 og 41 farges om. 41 skal farges iht. regel nr. 3.\\
+\scalebox{0.8}{
 \begin{tikzpicture}[level 1/.style={sibling distance=20mm},
 				   level 2/.style={sibling distance=10mm}]
 \draw[black] (0,1) node[above]{4.};
@@ -321,7 +387,9 @@ Setter inn 41 og 38 etter reglene.
 	child {node [node_black] {41}}
 ;
 \end{tikzpicture}
+}
 &
+\scalebox{0.8}{
 \begin{tikzpicture}[level 1/.style={sibling distance=20mm},
 				   level 2/.style={sibling distance=10mm}]
 \draw[black] (0,1) node[above]{5.};
@@ -329,13 +397,14 @@ Setter inn 41 og 38 etter reglene.
 	child {node[node_red] {19}
 		child {node[node_black] {12}
 			child{node[node_red] {8}}
-			child{node[node_null] {}}
+			child{node[node_null] {nil}}
 		}
 		child {node[node_red] {31}}
 	}
 	child {node [node_black] {41}}
 ;
 \end{tikzpicture}
+}
 &\\
 Når 19 nå kommer inn, så må vi igjen snu på treet for å opprettholde reglene til et BST. Farger nodene på nytt iht. reglene for rød-svarte trær.
 &
@@ -345,8 +414,59 @@ Til slutt setter vi inn 8 som løvnode til 12. Her trenger vi ikke å snu eller 
 \caption{Eksempel på innsetting av tallene 41, 38, 31, 12, 19 og 8 i et rød-svart tre.}
 \end{figure}
 
+\vspace{20pt}
+ 
+\begin{figure}[h!]
+\begin{lstlisting}[frame=single]
+/* Red-black insertion */
+
+public void put (Key key, Value val) {
+	root = put(root, key, val);
+	root.color = BLACK;
+}
+
+// insert key-value pair in subtree with root node
+private Node put (Node node, Key key, Value val) {
+	if (node == null) return new Node(key, val, RED, 1);
+
+	int cmp = key.compareTo(node.key);
+	if (cmp < 0) 
+		node.left = put(node.left, key, val);
+	if else (cmp > 0)
+		node.right = put (node.right), key, val);
+	else 
+		node.val = val;
+
+	if ( isRed(node.right) && !isRed(node.left) ) 
+		node = rotateLeft(node);
+	if ( isRed(node.left) && isRed(node.left.left) ) 
+		node = rotateRight(node);
+	if ( isRed(node.left) && isRed(node.right) ) 
+		flipColors(node);
+	node.N = size(node.left) + size(node.right) + 1;
+
+	return node;
+}
+\end{lstlisting}
+\caption{Eksempel på innsetting i rødsvart tre \cite{redblack}.}
+\end{figure}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{rll}
+&Average&Worst case\\
+\textbf{Plass} & O($n$) & O($n$)\\
+\textbf{Søk} & O($\log n$) & O($\log n$)\\
+\textbf{Innsetting} & O($\log n$) & O($\log n$)\\
+\textbf{Sletting} & O($\log n$) & O($\log n$)\\
+\end{tabular}
+\label{tab:obst}
+\caption{Tidkompleksitet for rød-svarte trær.}
+\end{table}
+
 %%% B-TRÆR %%%
 \subsection{B-trær}
+
 
 %%% MAPS %%%
 \section{Maps}
@@ -471,7 +591,7 @@ Begynner med å slette rot noden 1. Og flytter siste element (8) opp til rot pos
 				   level 1/.style={sibling distance=40mm},
 				   level 2/.style={sibling distance=20mm},
 				   level 3/.style={sibling distance=10mm}]
-\node[draw=red, thick, forbidden sign]{1}
+\node[draw=red, thick, forbidden sign] (B) {1}
 	child {node {3}
 		child {node {6}
 			child {node {15}}
@@ -489,10 +609,12 @@ Begynner med å slette rot noden 1. Og flytter siste element (8) opp til rot pos
 		}
 		child {node {4}
 			child {node {13}}
-			child {node[draw=red, thick] {8}}
+			child {node[draw=red, thick] (A) {8}}
 		}
 	}
 ;
+
+\draw[->, red, thick] (A) to [out=45,in=45] (B);
 \end{tikzpicture}
 }
 \end{center}
@@ -505,7 +627,7 @@ Får da dette resultatet. Og vi må nå flytte 8 ned til riktig posisjon.
 				   level 1/.style={sibling distance=40mm},
 				   level 2/.style={sibling distance=20mm},
 				   level 3/.style={sibling distance=10mm}]
-\node[draw=red, thick]{2}
+\node[draw=red, thick](B){2}
 	child {node {3}
 		child {node {6}
 			child {node {15}}
@@ -516,7 +638,7 @@ Får da dette resultatet. Og vi må nå flytte 8 ned til riktig posisjon.
 			child {node {9}}
 		}
 	}
-	child {node[draw=red, thick] {8}
+	child {node[draw=red, thick] (A) {8}
 		child {node {5}
 			child {node {10}}
 			child {node {11}}
@@ -526,6 +648,7 @@ Får da dette resultatet. Og vi må nå flytte 8 ned til riktig posisjon.
 		}
 	}
 ;
+\draw[<->, red, thick] (A) to [out=90,in=45] (B);
 \end{tikzpicture}
 }
 \end{minipage}
@@ -546,16 +669,17 @@ Får da dette resultatet. Og vi må nå flytte 8 ned til riktig posisjon.
 			child {node {9}}
 		}
 	}
-	child {node[draw=red, thick] {4}
+	child {node[draw=red, thick] (B) {4}
 		child {node {5}
 			child {node {10}}
 			child {node {11}}
 		}
-		child {node[draw=red, thick] {8}
+		child {node[draw=red, thick] (A) {8}
 			child {node {13}}
 		}
 	}
 ;
+\draw[<->, red, thick] (A) to [out=90,in=45] (B);
 \end{tikzpicture}
 }
 \end{minipage}
@@ -563,47 +687,59 @@ Får da dette resultatet. Og vi må nå flytte 8 ned til riktig posisjon.
 
 %%% GRAFER %%%
 \section{Grafer}
-\theoremstyle{mytheoremstyle}
-\newtheorem{graph}{Definisjon}[section]
-\begin{graph}
+
+\begin{definition}
+\emph{\textbf{Graf}}
 En \textbf{graf} $\mathcal{G}$ består av en ikke-tom mengde noder $\mathcal{V}$ og en mengde kanter $\mathcal{E}$, slik at enhvet kant forbinder nøyaktig to noder med hverandre eller en node med seg selv.
-\end{graph}
+\end{definition}
 
 \subsection{Terminologi}
-\begin{description}
-\item[Vektet] En graf er vektet dersom hver kant har en tredje komponent. En verdi langs kanten.
-\item[Sti] En sti gjennom grafen er en sekvens av noder $v_1, v_2, v_3, \dots, v_n$, slik at $(v_i,v_{i+1}) \in \mathcal{E}$ for $1 \leq i \leq n-1$.
-\item[Lengden] til stien er lik antall kanter på stien.
-\item[Løkke] Ei løkke i en rettet graf er en vei med lengde $\geq 1$, slik at $v_1=v_n$. Løkken er \textit{enkel} dersom stien er enkel.
-\item[Asyklisk] En rettet graf er asyklisk dersom den ikke har noen løkker. DAG (Directed, Asyclic Graph).
-\item[Sammenhengende] En urettet graf er sammenhengende dersom det fins en sti fra hver node til alle andre noder.
-\end{description}
+\begin{definition}
+\emph{\textbf{Vektet}} En graf er vektet dersom hver kant har en tredje komponent. En verdi langs kanten.
+\end{definition}
+\begin{definition}
+\emph{\textbf{Sti}} En sti gjennom grafen er en sekvens av noder $v_1, v_2, v_3, \dots, v_n$, slik at $(v_i,v_{i+1}) \in \mathcal{E}$ for $1 \leq i \leq n-1$.
+\end{definition}
+\begin{definition}
+\emph{\textbf{Lengde}} Lengden til stien er lik antall kanter på stien.
+\end{definition}
+\begin{definition}
+\emph{\textbf{Løkke}}  Ei løkke i en rettet graf er en vei med lengde $\geq 1$, slik at $v_1=v_n$. Løkken er \textit{enkel} dersom stien er enkel.
+\end{definition}
+\begin{definition}
+\emph{\textbf{Asyklisk}}  En rettet graf er asyklisk dersom den ikke har noen løkker. DAG (Directed, Asyclic Graph).
+\end{definition}
+\begin{definition}
+\emph{\textbf{Sammenhengende}} En urettet graf er sammenhengende dersom det fins en sti fra hver node til alle andre noder.
+\end{definition}
 
 \subsection{Topologisk sortering}
-
+\begin{definition}
+\emph{\textbf{Topologisk sortering}} En topologisk sortering (topologisk orden) av en rettet graf er en lineær ordning av nodene, slik at for hver rettet kant $\langle u,v \rangle$ fra node $u$ til node $v$, så kommer $u$ før $v$ i ordningen.
+\end{definition}
 \begin{figure}[h!]
 \centering
-\begin{tikzpicture}[->,auto,node distance=2cm,line width=0.2mm]
-  \node[state] 		(A)                    {7};
-  \node[state]         	(B) [right of=A] {5};
-  \node[state]		(C) [right of=B] {3};
-  \node[state]		(D) [below of=A] {11};
-  \node[state]		(E) [below of=B] {8};
-  \node[state]		(F) [below of=D] {2};
-  \node[state]		(G) [below of=E] {9};
-  \node[state]		(H) [below of=C] {10};
+\begin{tikzpicture}[->]
+\tikzstyle{vertex} = [circle, draw=black]
+\tikzstyle{edge} = [draw=black]
 
-  \path 	(A) edge node {} (E)
-		(A) edge node {} (D)
-		(B) edge node {} (D)
-		(C) edge node {} (E)
-		(C) edge node {} (H)
-		(D) edge [bend right] node {} (H)
-		(D) edge node {} (G)
-		(D) edge node {} (F)
-		(E) edge node {} (G);
+\node[vertex] (A) at (1,0) {A};
+\node[vertex] (Q) at (-0.5,-1) {Q};
+\node[vertex] (B) at (1,-2) {B};
+\node[vertex] (Z) at (3,0) {Z};
+\node[vertex] (J) at (3,-2) {J};
+\node[vertex] (P) at (4.5,-1) {P};
+
+\draw[edge] (Q) -- (A);
+\draw[edge] (Q) -- (B);
+\draw[edge] (A) -- (Z);
+\draw[edge] (A) -- (J);
+\draw[edge] (B) -- (J);
+\draw[edge] (B) -- (Z);
+\draw[edge] (J) -- (P);
+\draw[edge] (Z) -- (P);
 \end{tikzpicture}
-\caption{Eksempelgraf}
+\caption{Eksempelfigur for topologisk sortering.}
 \label{fig:graph}
 \end{figure}
 
@@ -611,20 +747,16 @@ I figur \ref{fig:graph} har vi følgende lovlige topologiske sorteringer:
 
 \begin{itemize}
 \item
-7, 5, 3, 11, 8, 2, 9, 10 (visual left-to-right, top-to-bottom)
+Q, A, B, J, Z, P
 \item
-3, 5, 7, 8, 11, 2, 9, 10 (smallest-numbered available vertex first)
+Q, B, A, J, Z, P
 \item
-3, 7, 8, 5, 11, 10, 2, 9 (because we can)
+Q, A, B, Z, J, P
 \item
-5, 7, 3, 8, 11, 10, 9, 2 (fewest edges first)
-\item
-7, 5, 11, 3, 10, 8, 9, 2 (largest-numered available vertex first)
-\item
-7, 5, 11, 2, 3, 8, 9, 10 (attempting top-to-bottom, left-to-right)
+Q, B, A, Z, J, P
 \end{itemize}
 
-\paragraph{Algoritmer} De vanligste algoritmene for topologisk sortering har lineær kjøretid i antall noder, pluss antall kanter; O$(|\mathcal{V}|+|\mathcal{E}|)$. En av disse kommer det et eksempel på her.
+\subsubsection{Algoritmer} De vanligste algoritmene for topologisk sortering har lineær kjøretid i antall noder, pluss antall kanter; O$(|\mathcal{V}|+|\mathcal{E}|)$. En av disse kommer det et eksempel på her.
 
 \begin{Verbatim}[frame=single]
 L <- empty list that will contain the sorted elements
@@ -657,7 +789,6 @@ For hver ukjente nabonode $w$ til $v$: Dersom avstanden vi får ved å følge ve
 Akkurat som for uvektede grafer, ser vi bare etter potensielle forbedringer for naboer som ennå ikke er kjent.
 \end{enumerate}
 
-\paragraph{Eksempel på Dijkstra: teorioppgave}
 \begin{figure}[h!]
 \centering
 \scalebox{0.8}{
@@ -759,9 +890,214 @@ function Dijkstra (Graph, source):
 end function;
 \end{Verbatim}
 
+\newpage
 
 \subsection{Prim}
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}
+\tikzstyle{vertex} = [circle, draw=black]
+\tikzstyle{edge} = [draw=black]
+\tikzstyle{selected edge} = [-, red!100]
+
+\node[vertex] (A) at (0,0) {A};
+\node[vertex] (B) at (2,0) {B};
+\node[vertex] (D) at (-2,0) {D};
+\node[vertex] (C) at (4,-2) {C};
+\node[vertex] (H) at (-2,-2) {H};
+\node[vertex] (E) at (0,-2) {E};
+\node[vertex] (F) at (2,-2) {F};
+\node[vertex] (I) at (0,-4) {I};
+\node[vertex] (G) at (2,-4) {G};
+
+\path (A) edge node [above] {3} (B);
+\path (A) edge node [left] {5} (E);
+\path (A) edge node [above] {9} (D);
+\path (B) edge node [right] {2} (C);
+\path (B) edge node [right] {1} (F);
+\path (B) edge node [left] {4} (E);
+\path (C) edge node [above] {6} (F);
+\path (C) edge node [right] {2} (G);
+\path (D) edge node [left] {8} (H);
+\path (E) edge node [above] {3} (F);
+\path (E) edge node [left] {7} (I);
+\path (F) edge node [right] {4} (G);
+\path (F) edge node [left] {3} (I);
+\path (G) edge node [above] {7} (I);
+\path (H) edge node [left] {7} (I);
+\path (H) edge node [above] {4} (E);
+\end{tikzpicture}
+\caption{Eksempelgraf for Prim og Kruskal.}
+\label{fig:graph3}
+\end{figure}
+
+\subsubsection{Framgangsmåte}
+\begin{enumerate}
+\item
+Initialiser et tre med en enkelt node, valgt tilfeldig fra grafen.
+\item
+Gro treet med én kant (av de kantene som går til en node som ikke er med i treet), finn den kanten med minst vekt og legg den inn i treet.
+\item
+Gjenta steg 2 til alle nodene er i treet.
+\end{enumerate}
+
+\begin{Verbatim}[frame=single]
+PRIM(G, w, r) 
+  for each u in G.V
+    u.key = infinite
+    u.parent = NIL
+  r.key = 0
+  Q = G.V
+  while Q is not empty
+    u = extract-min(Q)
+    for each v in G.Adj[u]
+      if (v in Q) and w(u,v) < v.key
+        v.parent = u
+        v.key = w(u,v)
+\end{Verbatim}
+
+Når man utfører Prims algoritme på grafen i figur \ref{fig:graph3}, så blir resultatet følgende:
+\begin{figure}[h!]
+\centering
+\scalebox{0.8}{
+\begin{tikzpicture}
+\tikzstyle{vertex} = [circle, draw=black]
+\tikzstyle{edge} = [draw=black]
+\tikzstyle{selected edge} = [-, red!100, very thick]
+
+\node[vertex] (A) at (0,0) {A};
+\node[vertex] (B) at (2,0) {B};
+\node[vertex] (D) at (-2,0) {D};
+\node[vertex] (C) at (4,-2) {C};
+\node[vertex] (H) at (-2,-2) {H};
+\node[vertex] (E) at (0,-2) {E};
+\node[vertex] (F) at (2,-2) {F};
+\node[vertex] (I) at (0,-4) {I};
+\node[vertex] (G) at (2,-4) {G};
+
+\path (A) edge node [above] {3} (B);
+\path (A) edge[black!20] node [left, gray] {5} (E);
+\path (A) edge[black!20] node [above, gray] {9} (D);
+\path (B) edge node [right] {2} (C);
+\path (B) edge node [right] {1} (F);
+\path (B) edge[black!20] node [left, gray] {4} (E);
+\path (C) edge[black!20] node [above, gray] {6} (F);
+\path (C) edge node [right] {2} (G);
+\path (D) edge node [left] {8} (H);
+\path (E) edge node [above] {3} (F);
+\path (E) edge node [left] {7} (I);
+\path (F) edge node [right] {4} (G);
+\path (F) edge node [left] {3} (I);
+\path (G) edge[black!20] node [above, gray] {7} (I);
+\path (H) edge[black!20] node [left, gray] {7} (I);
+\path (H) edge node [above] {4} (E);
+
+\draw[selected edge] (D) -- (H) -- (E) -- (F) -- (I) -- (F) -- (B) -- (A) -- (B) -- (C) -- (G);
+\end{tikzpicture}
+}
+\caption{Eksempelgraf \ref{fig:graph3} etter Prims algoritme.}
+\label{fig:prim}
+\end{figure}
+
+\begin{table}
+\centering
+\begin{tabular}{ccc}
+&avs.&fra\\
+A&0&--\\
+B&3&A\\
+C&2&B\\
+D&8&H\\
+E&3&F\\
+F&1&B\\
+G&2&C\\
+H&4&E\\
+I&3&F\\
+\cline{2-2}
+&26&\\
+\cline{2-2}
+\end{tabular}
+\caption{Tabell for Prims algoritme på figur \ref{fig:prim}.}
+\end{table}
+
+\textbf{MERK:} løsningen i figur \ref{fig:prim} er \textit{ikke} unik. Eneste måten man kan få et unikt resultat er om alle vektene på kantene er unike. Det samme gjelder for Kruskal.
+
 \subsection{Kruskal}
+\subsubsection{Framgangsmåte}
+\begin{itemize}
+\item
+Lag en \textit{skog} $\mathcal{F}$ (en sett med trær), hver hver node i grafen er et separat tre.
+\item
+Lag et sett $\mathcal{S}$ som inneholder alle kantene til grafen.
+\item
+Så lenge $\mathcal{S}$ ikke er tom og $\mathcal{F}$ ikke ennå er et spanning-tre:
+\begin{itemize}
+\item
+Fjern en kant men lavest vekt fra $\mathcal{S}$.
+\item
+Hvis kanten kobler to forskjellige trær, legg den i skogen slik at de to blir ett tre.
+\end{itemize}
+\end{itemize}
+Når algoritmen er ferdig, så former skogen et minimum spanning-tre for grafen. 
+
+\begin{Verbatim}[frame=single]
+KRUSKAL (G):
+  A = empty
+  for each v in G.V:
+    MAKE-SET(v)
+  for each (u,v) ordered by weight(u,v), increasing:
+    if FIND-SET(u) not in FIND-SET(v):
+      A = A union {(u,v)}
+      UNION(u,v)
+  return A
+\end{Verbatim}
+
+\begin{figure}[h!]
+\centering
+\scalebox{0.8}{
+\begin{tikzpicture}
+\tikzstyle{vertex} = [circle, draw=black]
+\tikzstyle{edge} = [draw=black]
+\tikzstyle{selected edge} = [-, red!100, very thick]
+
+\node[vertex] (A) at (0,0) {A};
+\node[vertex] (B) at (2,0) {B};
+\node[vertex] (D) at (-2,0) {D};
+\node[vertex] (C) at (4,-2) {C};
+\node[vertex] (H) at (-2,-2) {H};
+\node[vertex] (E) at (0,-2) {E};
+\node[vertex] (F) at (2,-2) {F};
+\node[vertex] (I) at (0,-4) {I};
+\node[vertex] (G) at (2,-4) {G};
+
+\path (A) edge node [above] {3} (B);
+\path (A) edge[black!20] node [left, gray] {5} (E);
+\path (A) edge[black!20] node [above, gray] {9} (D);
+\path (B) edge node [right] {2} (C);
+\path (B) edge node [right] {1} (F);
+\path (B) edge[black!20] node [left, gray] {4} (E);
+\path (C) edge[black!20] node [above, gray] {6} (F);
+\path (C) edge node [right] {2} (G);
+\path (D) edge node [left] {8} (H);
+\path (E) edge node [above] {3} (F);
+\path (E) edge node [left] {7} (I);
+\path (F) edge node [right] {4} (G);
+\path (F) edge node [left] {3} (I);
+\path (G) edge[black!20] node [above, gray] {7} (I);
+\path (H) edge[black!20] node [left, gray] {7} (I);
+\path (H) edge node [above] {4} (E);
+
+\draw[selected edge] (D) -- (H) -- (E) -- (F) -- (I) -- (F) -- (B) -- (A) -- (B) -- (C) -- (G);
+\end{tikzpicture}
+}
+\caption{Eksempelgraf \ref{fig:graph3} etter Kruskals algoritme.}
+\label{fig:kruskal}
+\end{figure}
+
+\begin{tabular}{r|ccccccccl}
+\textbf{Kant} & FB&BC&CG&FI&FE&BA&EH&HD\\
+\cline{1-9}
+\textbf{Vekt}&1&2&2&3&3&3&4&8&$\Rightarrow$26
+\end{tabular}
 
 % Dybde-først
 \subsection{Dybde-først}
@@ -823,6 +1159,14 @@ En sammenhengende urettet graf er \textbf{bi-connected} hvis det ikke er noen no
 
 Grafen i figur \ref{fig:graphbi} er \textit{ikke} bi-connected, fordi nodene A, I, G og H er articulation points.
 
+\subsubsection{DFS spanning-tre av figur \ref{fig:graphbi}}
+\begin{tikzpicture}[->, every node/.style={draw=black, circle}]
+\node{A}
+	child {node {B}}
+	child {node {C}};
+\end{tikzpicture}
+
+
 \subsection{Strongly connected components (SCC)}
 \theoremstyle{mytheoremstyle}
 \newtheorem{scc}{Definisjon}[subsection]
@@ -834,21 +1178,103 @@ Gitt en rettet graf $\mathcal{G} = (\mathcal{V}, \mathcal{E})$. En \textbf{stron
 \section{Kombinatorisk søk}
 \section{Rekursjon}
 
+%%% TEKSTALGORITMER %%%
 \section{Tekstalgoritmer}
 
+% Brute force
+\subsection{Brute force}
+Brute force metoden sjekker en og en karakter i teksten med nålen, og flytter med 1 om det er mismatch.
+
+\subsubsection{Analyse}
+Worst case så får vi mismatch $(n-m)$ ganger og suksess $(n-m)+1$ ganger. Totale sammenligninger er $((n-m)+1 \times m)$ som gir kjøretid O($n^2$).
+
+% Boyer Moore
+\subsection{Boyer Moore}
+\begin{itemize}
+\item
+Først må man lage «bad match table».
+\item
+Sammenligne nålen med teksten, starter med karakteren lengst til høyre i nålen.
+\item
+Hvis mismatch, flytt nålen fram iht. verdien i tabellen.
+\end{itemize}
+
+\subsubsection{Eksempel}
+\begin{description}
+\item[Pattern (nål)] tooth
+\item[Tekst] trusthardtoothbrushes
+\end{description}
+
+\paragraph{1.} Konstruere «bad match table». 
+\begin{center}
+\texttt{value = length - index - 1}
+\end{center}
+Alle andre bokstaver har verdi lik lengden.
+\begin{center}
+\begin{tabular}{rccccc}
+&T&O&O&T&H\\
+index:&0&1&2&3&4\\
+\end{tabular}
+\end{center}
+Lengden på denne nålen er 5. Finner verdiene ved å bruke \texttt{value = length - index - 1}.
+\begin{center}
+\begin{tabular}{cccl}
+T = & $5-0-1$&= 4\\
+O = & $5-1-1$&= 3\\
+O = & $5-1-2$&= 2&Erstatter her forrige verdi av O med ny verdi til O.\\
+T = &$5-3-1$& = 1&Erstatter her forrige verdi av T med ny verdi til T.\\
+H = &5 &&Verdien skal ikke være mindre enn 1. Får da verdi lik lengden.\\
+\end{tabular}
+
+\begin{tabular}{l|llll}
+Bokstav&T&O&H&$*$\\
+\hline
+Verdi&1&2&5&5\\
+\end{tabular}
+\end{center}
+
+\scalebox{0.9}{
+\begin{tabular}{cccccccccccccccccccccc}
+&T&R&U&S&\textcolor{red}{T}&\textcolor{red}{H}&A&R&D&T&\textcolor{red}{O}&O&\textcolor{red}{T}&H&B&R&U&S&H&E&S\\
+\textbf{1.}&T&O&O&T&\textcolor{red}{H}\\
+\textbf{2.}&&T&O&\textcolor{red}{O}&\textcolor{dkgreen}{T}&\textcolor{dkgreen}{H}\\
+\textbf{3.}&&&&&&&T&O&O&T&\textcolor{red}{H}\\
+\textbf{4.}&&&&&&&&&T&O&O&T&\textcolor{red}{H}\\
+\textbf{5.}&&&&&&&&&&\textcolor{dkgreen}{T}&\textcolor{dkgreen}{O}&\textcolor{dkgreen}{O}&\textcolor{dkgreen}{T}&\textcolor{dkgreen}{H}\\
+\end{tabular}
+}
+
+I steg \textbf{1.} får vi mismatch på H, fordi den ikke er det samme som T. Da må vi slå opp i tabellen på den bokstaven som \textbf{\textit{vi møter i teksten}}, og hoppe fram tilsvarende antall steg. I første tilfellet skal vi hoppe 1 plass fram (for 1 er verdien til T). 
+
+Sjekker på nytt i steg \textbf{2.}, her får vi match på T og H, men mismatch på O. Da hopper vi S-plasser frem. Siden S ikke er med i tabellen vår (eller den er med som $*$, som er alle andre bokstaver), så hopper vi 5 plasser frem.
+
+I steg \textbf{3.} får vi mismatch på H mot O, og må hoppe O-plasser frem---altså 2. I steg \textbf{4.} er det mismatch mellom H og T, vi hopper T-plasser frem---altså 1. Og vips! Så har vi funnet nålen i teksten vår!
+
+\subsubsection{Analyse}
+Worst case er det samme som brute force. Input tekst $1^n$ kjører $n$ ganger, og nål $011\dots1$ kjører $m$ ganger. Dette gir O($nm$). Best case har input tekst $1^n$ og nål $0^m$, som gir O($n/m$). Average case er O($m/|\Sigma|$), raskere enn brute force.
 
 
 
 
 
+\newpage
+
+\begin{thebibliography}{}
+
+\bibitem{redblack}
+  Unknown,
+  \emph{RedBlackBST.java}.
+  algs4.cs.princeton.edu,
+  \url{http://algs4.cs.princeton.edu/33balanced/RedBlackBST.java.html}
+
+\bibitem{bm}
+  Unknown,
+  \emph{Boyer Moore Horspool Algorithm}.
+  \url{https://www.youtube.com/watch?v=PHXAOKQk2dw}
 
 
 
-
-
-
-
-
+\end{thebibliography}
 
 
 
