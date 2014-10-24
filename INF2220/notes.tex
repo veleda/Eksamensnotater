@@ -1199,7 +1199,7 @@ Sammenligne nålen med teksten, starter med karakteren lengst til høyre i nåle
 Hvis mismatch, flytt nålen fram iht. verdien i tabellen.
 \end{itemize}
 
-\subsubsection{Eksempel}
+\subsubsection{Eksempel: Bad character shift}
 \begin{description}
 \item[Pattern (nål)] tooth
 \item[Tekst] trusthardtoothbrushes
@@ -1250,12 +1250,61 @@ Sjekker på nytt i steg \textbf{2.}, her får vi match på T og H, men mismatch 
 
 I steg \textbf{3.} får vi mismatch på H mot O, og må hoppe O-plasser frem---altså 2. I steg \textbf{4.} er det mismatch mellom H og T, vi hopper T-plasser frem---altså 1. Og vips! Så har vi funnet nålen i teksten vår!
 
-\subsubsection{Analyse}
+\paragraph{Analyse}
 Worst case er det samme som brute force. Input tekst $1^n$ kjører $n$ ganger, og nål $011\dots1$ kjører $m$ ganger. Dette gir O($nm$). Best case har input tekst $1^n$ og nål $0^m$, som gir O($n/m$). Average case er O($m/|\Sigma|$), raskere enn brute force.
 
 
+\subsubsection{Eksempel: Good suffix shift}
+Konstruere \textit{good suffix table} for nålen \texttt{TCCTATTCTT}.
 
+\begin{minipage}{0.5\textwidth}
+\paragraph{1.} Sjekker først \textit{ikke}-\texttt{T}, det er to shift før man finner dette.
+\\
+\noindent\texttt{TCCTATTCT\textcolor{red}{T}}\\
+\texttt{--TCCTATT\textcolor{red}{C}TT}
+\\
+\paragraph{2.} Så sjekker man \textit{ikke}-\texttt{TT}. Dette finner man etter ett shift.
+\\
+\noindent\texttt{TCCTATTC\textcolor{red}{TT}}\\
+\texttt{-TCCTATT\textcolor{red}{CT}T}
+\\
+\paragraph{3.} For å finne \textit{ikke}-\texttt{CTT} må vi flytte 3 steg; til \texttt{ATT}.
+\\
+\noindent\texttt{TCCTATT\textcolor{red}{CTT}}\\
+\texttt{---TCCT\textcolor{red}{ATT}CTT}
+\end{minipage}
+\hspace{10pt}
+\begin{minipage}{0.5\textwidth}
+\paragraph{4.} Så kommer vi til \textit{ikke}-\texttt{TCTT}. Denne eksisterer ikke, MEN om nålen har lik suffix som prefiks (her \texttt{T} som start og slutt), så flytter vi bare fram til prefiksen. Da må vi flytte nålen 9 hakk, selv om lengden er 10.
+\\
+\noindent\texttt{TCCTATTCT\textcolor{red}{T}}\\
+\texttt{---------\textcolor{red}{T}CCTATTCTT}
+\\
+Alle de neste shiftene vil også være dette, fordi de får ingen andre treff i nålen.
+\end{minipage}
 
+\vspace{10pt}
+
+\noindent Vi får da følgende good suffix table:
+\begin{table}[h!]
+\centering
+\begin{tabular}{crc}
+index&mismatch&shift\\
+\hline
+0&\texttt{\textcolor{red}{T}}&2\\
+1&\texttt{\textcolor{red}{T}T}&1\\
+2&\texttt{\textcolor{red}{C}TT}&3\\
+3&\texttt{\textcolor{red}{T}CTT}&9\\
+4&\texttt{\textcolor{red}{T}TCTT}&9\\
+5&\texttt{\textcolor{red}{A}TTCTT}&9\\
+6&\texttt{\textcolor{red}{T}ATTCTT}&9\\
+7&\texttt{\textcolor{red}{C}TATTCTT}&9\\
+8&\texttt{\textcolor{red}{C}CTATTCTT}&9\\
+9&\texttt{\textcolor{red}{T}CCTATTCTT}&9\\
+\end{tabular}
+\caption{Eksempel på good suffix table.}
+\label{tab:gst}
+\end{table}
 
 \newpage
 
