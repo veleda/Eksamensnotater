@@ -148,6 +148,10 @@ for (i = 0; i < n; i++)
 \end{Verbatim}
 Her har vi to steg: løkken som går $n$ steg, og løkken som går $m$ steg. Den første løkken går i O(N), mens den andre løkken går i O(M). Siden den innerte løkken går M ganger N ganger (siden den er nestet i den ytterste løkken). Så vil den totale tiden være O(M) $\times$ O(N), dermed O$(n^2)$.
 
+\subsection{Logaritmisk tid}
+Algoritmer som tar logaritmisk tid, O$(\log n)$, finner man i operasjoner på binære trær, eller når man bruker binære søk.
+
+
 
 %%% TRÆR %%%
 \section{Trær}
@@ -985,8 +989,8 @@ Når man utfører Prims algoritme på grafen i figur \ref{fig:graph3}, så blir 
 \path (C) edge node [right] {2} (G);
 \path (D) edge node [left] {8} (H);
 \path (E) edge node [above] {3} (F);
-\path (E) edge node [left] {7} (I);
-\path (F) edge node [right] {4} (G);
+\path (E) edge[black!20] node [left] {7} (I);
+\path (F) edge[black!20] node [right] {4} (G);
 \path (F) edge node [left] {3} (I);
 \path (G) edge[black!20] node [above, gray] {7} (I);
 \path (H) edge[black!20] node [left, gray] {7} (I);
@@ -1079,8 +1083,8 @@ KRUSKAL (G):
 \path (C) edge node [right] {2} (G);
 \path (D) edge node [left] {8} (H);
 \path (E) edge node [above] {3} (F);
-\path (E) edge node [left] {7} (I);
-\path (F) edge node [right] {4} (G);
+\path (E) edge[black!20] node [left] {7} (I);
+\path (F) edge[black!20] node [right] {4} (G);
 \path (F) edge node [left] {3} (I);
 \path (G) edge[black!20] node [above, gray] {7} (I);
 \path (H) edge[black!20] node [left, gray] {7} (I);
@@ -1119,7 +1123,7 @@ En sammenhengende urettet graf er \textbf{bi-connected} hvis det ikke er noen no
 
 \begin{figure}[h!]
 \centering
-\scalebox{0.7}{
+\scalebox{0.6}{
 \begin{tikzpicture}[->,auto,node distance=2.5cm,line width=0.2mm]
 \node[state] (A) {A};
 \node[state] (C) [below right of=A] {C};
@@ -1306,6 +1310,150 @@ index&mismatch&shift\\
 \label{tab:gst}
 \end{table}
 
+
+%%% SORTERING %%%
+\section{Sortering}
+
+
+\begin{table}
+\centering
+\begin{tabular}{l|lll|l}
+&\textbf{Tid}&&&\textbf{Rom}\\
+\textbf{Algoritme}&Best&Average&Worst&Worst\\
+\hline
+Quicksort&
+\textcolor{orange}{O$(\log (n))$}&\textcolor{dkgreen}{O$(\log (n))$}&\textcolor{red}{O$(n^2)$}&\textcolor{orange}{O$(n)$}\\
+Mergesort&
+\textcolor{orange}{O$(\log (n))$}&\textcolor{dkgreen}{O$(\log (n))$}&\textcolor{dkgreen}{O$(\log (n))$}&\textcolor{dkgreen}{O$(1)$}\\
+Heapsort&
+\textcolor{orange}{O$(\log (n))$}&\textcolor{dkgreen}{O$(\log (n))$}&\textcolor{dkgreen}{O$(\log (n))$}&\textcolor{dkgreen}{O$(n)$}\\
+Bubble sort&
+\textcolor{dkgreen}{O$(n)$}&\textcolor{red}{O$(n^2)$}&\textcolor{red}{O$(n^2)$}&\textcolor{dkgreen}{O$(n)$}\\
+Insertion sort&
+\textcolor{dkgreen}{O$(n)$}&\textcolor{red}{O$(n^2)$}&\textcolor{red}{O$(n^2)$}&\textcolor{dkgreen}{O$(1)$}\\
+Selection sort&
+\textcolor{red}{O$(n^2)$}&\textcolor{red}{O$(n^2)$}&\textcolor{red}{O$(n^2)$}&\textcolor{dkgreen}{O$(1)$}\\
+Bucket sort&
+\textcolor{dkgreen}{O$(n+k)$}&\textcolor{dkgreen}{O$(n+k)$}&\textcolor{red}{O$(n^2)$}&\textcolor{orange}{O$(nk)$}\\
+Radix sort&
+\textcolor{dkgreen}{O$(nk)$}&\textcolor{dkgreen}{O$(nk)$}&\textcolor{dkgreen}{O$(nk)$}&\textcolor{orange}{O$(n+k)$}\\
+\end{tabular}
+\label{tab:sorting}
+\caption{Kompleksiteten til forskjellige sorteringsalgoritmer.}
+\end{table}
+
+\subsection{Quicksort}
+Quicksort er en \textit{divide and conquer} algoritme. Den deler først en stor array inn i to mindre sub-arrayer: de mindre og de større verdiene. Sorterer så sub-arrayene rekursivt.
+
+\begin{enumerate}
+\item
+Velg et element, kalt \textit{pivot}, fra arrayen.
+\item
+Reorder arrayen slik at alle elementene med vardier mindre enn pivot kommer før pivot, og alle elementer større enn pivot kommer etter. Pivot er på sin sluttplass. Dette kalles \textit{partisjonering}.
+\item
+Rekursivt gjenta stegene over på sub-arrayene med mindre og større verdier.
+\end{enumerate}
+
+\begin{Verbatim}[frame=single]
+quicksort(A, i, k):
+    if i < k:
+        p := partition(A, i, k)
+        quicksort(A, i, p-1)
+        quicksort(A, p+1, k)
+
+partition(array, left, right)
+    pivotIndex := choosePivot(array, left, right)
+    pivotValue := array[pivotIndex]
+    swap array[pivotIndex] and array[right]
+    storeIndex := left
+    for i from left to right - 1
+        if array[i] < pivotValue
+            swap array[i] and array[storeIndex]
+            storeIndex := storeIndex+1
+    swap array[storeIndex] and array[right]
+    return storeIndex
+\end{Verbatim}
+
+\subsection{Mergesort}
+Mergesort er en \textit{divide and conquer} algoritme.
+\begin{enumerate}
+\item
+Del den usorterte listen i \textit{n} sublister, hvor hver inneholder \textit{ett} element.
+\item
+Smelt sammen sublistene for å lage nye sorterte sublister til det er bare ei liste igjen. Dette er den sorterte listen.
+\end{enumerate}
+
+\subsection{Heapsort}
+Heapsort er en \textit{in-place} algoritme, men den er ikke en \textit{stable sort}.
+
+Først bygger man en heap ut av dataene. Ofte plassert i en array etter kravene for et komplett binært tre. Roten er lagret på index 0, hvis \texttt{i} er indeksen til \textit{denne} noden, så:\vspace{-10pt}
+\begin{Verbatim}
+iParent     = floot((i-1)/2)
+iLeftChild  = 2*i+1
+iRightChild = 2*i+2
+\end{Verbatim}
+
+I det andre steget lager man en sortert array ved gjentatte ganger fjerne største element fra heapen (roten), og sette det inn i arrayen. Heapen er oppdatert etter hver sletting, for å opprettholde kravene. Når alle elementene er slettet fra heapen, er resultatet en sortert array.
+
+\subsection{Bubble sort}
+Bubble sort, også kalt sinking sort, er en sammenlignings-sorteringsalgoritme. Den er for treig for all praktisk bruk, til og med treigere enn insertion sort.
+
+\begin{Verbatim}[frame=single]
+bubblesort(A : list of sortable items)
+    n = length(A)
+    do:
+        swapped = false
+        for i = 1 to n-1 inclusive do
+            if A[i-1] > A[i] then
+               swap(A[i-1], A[i])
+               swapped = true
+    while not swapped
+\end{Verbatim}
+
+\subsection{Insertion sort}
+Enkel sorteringsalgoritme, som ikke er særlig effektiv på større lister. Da er algoritmer som quicksort, heapsort osv å foretrekke.
+
+\begin{Verbatim}[frame=single]
+for i = 1 to length (A)
+    x = A[i]
+    j = i
+    while j > 0 and A[j-1] > x
+        A[j] = A[j-1]
+        j = j-1
+    A[j] = x
+\end{Verbatim}
+
+\subsection{Selection sort}
+Selection sort er en \textit{in-place} sammenlignings-algoritme.
+
+\noindent La $\mathcal{L}$ være et ikke-tomt sett og $f : \mathcal{L} \rightarrow \mathcal{L}$, slik at $f(\mathcal{L}) = \mathcal{L}'$ hvor:
+\begin{enumerate}
+\item
+$\mathcal{L}'$ er en permutasjon av $\mathcal{L}$,
+
+\item
+$e_i \leq e_{i+1}$ for alle $e \in \mathcal{L}'$ og $i \in \mathbb{N}$,
+
+\item
+$f(\mathcal{L}) = \left\{\begin{array}{ll}
+   \mathcal{L} & if |\mathcal{L}|=1\\
+    \{s\} \cup f(\mathcal{L}_s),&\mathrm{ellers}
+  \end{array}\right.$
+
+\item
+$s$ er det \textit{minste elementet} i $\mathcal{L}$, og
+
+\item
+$\mathcal{L}_s$ er settet med elementer av $\mathcal{L}$ uten instansen av det minste elementet fra $\mathcal{L}$.
+\end{enumerate}
+
+Algoritmen finner minste verdi, bytter denne med verdien i første posisjon, og repeterer disse stegene for resten av listen. 
+
+\subsection{Bucket sort}
+Bucket sort, eller bin sort, er en distribu
+
+
+
 \newpage
 
 \begin{thebibliography}{}
@@ -1320,6 +1468,11 @@ index&mismatch&shift\\
   Unknown,
   \emph{Boyer Moore Horspool Algorithm}.
   \url{https://www.youtube.com/watch?v=PHXAOKQk2dw}
+
+\bibitem{sorting}
+  Unknown,
+  \emph{Sorting algorithm}.
+  \url{http://en.wikipedia.org/wiki/Sorting_algorithm}
 
 
 
