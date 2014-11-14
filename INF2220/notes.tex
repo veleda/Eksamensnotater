@@ -1,4 +1,4 @@
-\documentclass[11pt,a4paper]{article}
+\documentclass[10pt,a4paper]{article}
 \usepackage{listings}
 \usepackage[utf8]{inputenc}
 \usepackage{mathtools}
@@ -19,6 +19,7 @@
 \usepackage{algorithmicx}
 \usepackage{fancyvrb}
 
+\usepackage[margin=2.5cm]{geometry}
 
 
 \usetikzlibrary{arrows}
@@ -89,7 +90,7 @@ veronahe@student.matnat.uio.no}
 \newpage{}
 
 \section*{Introduksjon}
-Dette er notater til kurset INF2220--Algoritmer og datastrukturer ved Universitetet i Oslo. Disse notatene er i all hovedsak basert på forelesningsfoiler, egne notater og læreboka. Brukes til repetisjon før eksamen og som notater under eksamen. Merk at notatene helt sikkert inneholder feil og mangler.
+Dette er notater til kurset INF2220--Algoritmer og datastrukturer\cite{inf2220} ved Universitetet i Oslo. Disse notatene er i all hovedsak basert på forelesningsfoiler, egne notater og læreboka. Brukes til repetisjon før eksamen og som notater under eksamen. Merk at notatene helt sikkert inneholder feil og mangler.
 
 
 %%% KJØRETID %%%
@@ -1450,7 +1451,51 @@ $\mathcal{L}_s$ er settet med elementer av $\mathcal{L}$ uten instansen av det m
 Algoritmen finner minste verdi, bytter denne med verdien i første posisjon, og repeterer disse stegene for resten av listen. 
 
 \subsection{Bucket sort}
-Bucket sort, eller bin sort, er en distribu
+Bucket sort, eller bin sort, er en \textit{distribution sort} algoritme.
+
+\begin{enumerate}
+\item
+Sett opp en array med tomme «bøtter».
+\item
+\textbf{Scatter}: gå over den orginale arrayen, og putt hvert objekt i sin bøtte.
+\item
+Sortert hver ikke-tomme bøtte.
+\item
+\textbf{Gather}: besøk alle bøttene etter orden, og putt alle elementer tilbake i den orginale arrayen.
+\end{enumerate}
+
+\begin{Verbatim}[frame=single]
+function bucketSort(array, n)
+    buckets <- new array of n empty lists
+    for i = 0 to (length(array) - 1) do
+        insert array[i] into buckets[mbits(array[i], k)]
+    for i = 0 to n - 1 do
+        nextSort(buckets[i]);
+    return the concatenation of buckets[0],...,buckets[n-1]
+\end{Verbatim}
+
+\subsection{Radix sort}
+Radix sort er en \textit{non-comparative} integer sorterings algoritme. Er i samme familie som bucket sort.
+
+\begin{enumerate}
+\item
+Ta det minst signifikante tallet av hver nøkkel.
+\item
+Gruppér nøklene basert på dette tallet.
+\item
+Gjenta til grupperingsprosessen med hvert høyere signifikante bit.
+\end{enumerate}
+
+\paragraph{Eksempel} Orginal, usortert lise: 170, 45, 75, 90, 802, 2, 24, 66
+\begin{itemize}
+\item
+Sortere på minst signifikante (1-er plassen): 17\textcolor{red}{0}, 9\textcolor{red}{0}, 80\textcolor{red}{2}, \textcolor{red}{2}, 2\textcolor{red}{4}, 4\textcolor{red}{5}, 7\textcolor{red}{5}, 6\textcolor{red}{6}
+\item
+Sortere på 10-er plassen: 8\textcolor{red}{0}2, 2, \textcolor{red}{2}4, \textcolor{red}{4}5, \textcolor{red}{6}6, 1\textcolor{red}{7}0, \textcolor{red}{7}5, \textcolor{red}{9}0
+\item
+Sortere på 100 plassen: 2, 24, 45, 66, 75, 90, \textcolor{red}{1}70, \textcolor{red}{8}02
+\end{itemize}
+
 
 
 
@@ -1473,6 +1518,11 @@ Bucket sort, eller bin sort, er en distribu
   Unknown,
   \emph{Sorting algorithm}.
   \url{http://en.wikipedia.org/wiki/Sorting_algorithm}
+
+\bibitem{inf2220}
+ Insitutt for informatikk, Universitetet i Oslo,
+  \emph{INF2220--Algoritmer og datastrukturer}.
+  \url{http://www.uio.no/studier/emner/matnat/ifi/INF2220/}
 
 
 
