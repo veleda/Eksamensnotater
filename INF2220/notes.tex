@@ -1,4 +1,4 @@
-\documentclass[10pt,a4paper]{article}
+\documentclass[11pt,a4paper]{article}
 \usepackage{listings}
 \usepackage[utf8]{inputenc}
 \usepackage{mathtools}
@@ -41,7 +41,7 @@
 
 \lstset{ %
   language=Java,                % the language of the code
-  basicstyle=\small\rmfamily,           % the size of the fonts that are used for the code
+  basicstyle=\small\ttfamily,           % the size of the fonts that are used for the code
   numbers=none,                   % where to put the line-numbers
   numberstyle=\small\color{gray},  % the style that is used for the line-numbers
   stepnumber=1,                   % the step between two line-numbers. If it's 1, each line 
@@ -49,9 +49,9 @@
   numbersep=5pt,                  % how far the line-numbers are from the code
   backgroundcolor=\color{white},      % choose the background color. You must add \usepackage{color}
   showspaces=false,               % show spaces adding particular underscores
-  showstringspaces=false,         % underline spaces within strings
+  showstringspaces=true,         % underline spaces within strings
   showtabs=false,                 % show tabs within strings adding particular underscores
-  frame=,                   % adds a frame around the code
+  frame=true,                   % adds a frame around the code
   rulecolor=\color{gray},        % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. commens (green here))
   tabsize=2,                      % sets default tabsize to 2 spaces
   captionpos=b,                   % sets the caption-position to bottom
@@ -59,7 +59,7 @@
   breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
   title=\lstname,                   % show the filename of files included with \lstinputlisting;
                                   % also try caption instead of title
-  keywordstyle=\bfseries\color{black},          % keyword style
+  keywordstyle=\bfseries\color{blue},          % keyword style
   commentstyle=\color{dkgreen},       % comment style
   stringstyle=\color{mauve},         % string literal style
   escapeinside={\%*}{*)},            % if you want to add LaTeX within your code
@@ -91,11 +91,11 @@ veronahe@ifi.uio.no}
 
 \maketitle{}
 \tableofcontents
-\newpage{}
 
 \section*{Introduksjon}
 Dette er notater til kurset INF2220--Algoritmer og datastrukturer\cite{inf2220} ved Universitetet i Oslo. Disse notatene er i all hovedsak basert på forelesningsfoiler, egne notater og læreboka. Brukes til repetisjon før eksamen og som notater under eksamen. Merk at notatene helt sikkert inneholder feil og mangler.
 
+\newpage
 
 %%% KJØRETID %%%
 \section{Kjøretid}
@@ -144,6 +144,8 @@ $n!$&\\
 \caption{Noen funksjoner for O$(n)$.}
 \end{figure}
 
+\newpage
+
 \subsection{Analyse av kjøretid}
 Når man analyserer en algoritme, så må man se på \textit{stegene} den bruker og analysere de hver for seg. Ta for eksempel denne kodesnutten:
 \begin{Verbatim}[frame=single]
@@ -151,12 +153,30 @@ for (i = 0; i < n; i++)
   for (j = 0; j < m; j++)
     array[i][j] = 0;
 \end{Verbatim}
-Her har vi to steg: løkken som går $n$ steg, og løkken som går $m$ steg. Den første løkken går i O(N), mens den andre løkken går i O(M). Siden den innerte løkken går M ganger N ganger (siden den er nestet i den ytterste løkken). Så vil den totale tiden være O(M) $\times$ O(N), dermed O$(n^2)$.
+
+\noindent To steg:\vspace{-15pt}
+\begin{enumerate}
+\item
+Ytterste løkke går i O(n).
+\item
+Innerte løkke går i O(m).
+\end{enumerate}
+\vspace{-15pt}
+Dette gir O(n) $\times$ O(m) = O(n$^2$).
 
 \subsection{Logaritmisk tid}
-Algoritmer som tar logaritmisk tid, O$(\log n)$, finner man i operasjoner på binære trær, eller når man bruker binære søk.
+Algoritmer som tar logaritmisk tid, O$(\log n)$, finner man i operasjoner på binære trær, eller når man bruker binære søk og i \textit{divide and conquer}-algoritmer. 
 
+\begin{figure}[h!]
+\begin{Verbatim}[frame=single]
+for (i = 1; i < n; i = i * 2)
+    sum++;
+\end{Verbatim}
+\vspace{-15pt}
+\caption{Eksempel på løkke som går i O(log n).}
+\end{figure}
 
+\newpage
 
 %%% TRÆR %%%
 \section{Trær}
@@ -174,7 +194,7 @@ Et \textbf{tre} er en samling \textbf{noder}. Et ikke-tomt tre består av en \te
 \item[Post-order] venstre barn, høyre barn, rot
 \end{description}
 
-\begin{lstlisting}
+\begin{lstlisting}[frame=none]
 /* IN-ORDER TRAVERSAL */
 
 public void inOrder (Node node) {
@@ -225,8 +245,6 @@ Definert av den unike veien fra roten til noden. Rotens dybde er 0.
 Definert som lengden av den \textit{lengste} veien fra noden til en løvnode. Alle løvnoder har høyde 0. Høyden til et tre er lik høyden til roten.
 \end{definition}
 
-
-\newpage
 %%% BINÆRTRÆR %%%
 \subsection{Binært søketre}
 
@@ -457,6 +475,7 @@ private Node put (Node node, Key key, Value val) {
 	return node;
 }
 \end{lstlisting}
+\vspace{-15pt}
 \caption{Eksempel på innsetting i rødsvart tre \cite{redblack}.}
 \end{figure}
 
@@ -473,12 +492,105 @@ private Node put (Node node, Key key, Value val) {
 \caption{Tidkompleksitet for rød-svarte trær.}
 \end{table}
 
+\newpage
+
 %%% B-TRÆR %%%
 \subsection{B-trær}
 
+Kravene til et B-tre er følgende:
+\begin{itemize}
+\item
+Alle data er lagret i løvnodene.
+\item
+Roten har mellom \textbf{2} og \textbf{M} barn. 
+\item
+Alle løvnoder har mellom \textbf{L/2} og \textbf{L} elementer.
+\end{itemize}
 
-%%% MAPS %%%
-\section{Maps}
+\begin{table}[h!]
+\centering
+\begin{tabular}{rll}
+&Average&Worst case\\
+\textbf{Plass} & O($n$) & O($n$)\\
+\textbf{Søk} & O($\log n$) & O($\log n$)\\
+\textbf{Innsetting} & O($\log n$) & O($\log n$)\\
+\textbf{Sletting} & O($\log n$) & O($\log n$)\\
+\end{tabular}
+\label{tab:obst}
+\caption{Tidkompleksitet for B-trær.}
+\end{table}
+
+\newpage
+
+\paragraph{Eksempel på innsetting i B-tre} Sette inn tallene 2, 6, 17, 20, 24, 25, 27, 29, 30, 31, 32, 5, 21, 1, 40, 45, 50, 70 med kravene M = 5, L = 5.
+
+\begin{minipage}{0.5\textwidth}
+\begin{tikzpicture}[scale=0.8, every node/.style = {rectangle split ignore empty parts},
+					level 1/.style = {sibling distance=20mm},
+					level 2/.style = {sibling distance=15mm}]
+
+\tikzstyle{leaf}=[rectangle split, below]
+\tikzstyle{normal_node} = [rectangle split, rectangle split horizontal,draw]
+
+\node[normal_node] {20 \nodepart{two} 27 \nodepart{three} 31} [->]
+	child {node[leaf] {2 \nodepart{two} 6 \nodepart{three} 17}}
+	child {node[leaf] {20 \nodepart{two} 24 \nodepart{three} 25}}
+	child {node[leaf] {27 \nodepart{two} 29 \nodepart{three} 30}}
+	child {node[leaf] {31 \nodepart{two} 32 \nodepart{three} \textcolor{red}{5}}}
+;
+\end{tikzpicture}
+\end{minipage}
+\begin{minipage}{0.5\textwidth}
+\begin{tikzpicture}[scale=0.8,every node/.style = {rectangle split ignore empty parts},
+					level 1/.style = {sibling distance=20mm},
+					level 2/.style = {sibling distance=15mm}]
+
+\tikzstyle{leaf}=[rectangle split, below]
+\tikzstyle{normal_node} = [rectangle split, rectangle split horizontal,draw]
+
+\node[normal_node] {20 \nodepart{two} 27 \nodepart{three} 31} [->]
+	child {node[leaf] {2 \nodepart{two} 5 \nodepart{three} 6 \nodepart{four} 17}}
+	child {node[leaf] {20 \nodepart{two} 24 \nodepart{three} 25}}
+	child {node[leaf] {27 \nodepart{two} 29 \nodepart{three} 30}}
+	child {node[leaf] {31 \nodepart{two} 32 \nodepart{three} \textcolor{red}{21}}}
+;
+\end{tikzpicture}
+\end{minipage}
+\begin{minipage}{0.5\textwidth}
+\begin{tikzpicture}[scale=0.8,every node/.style = {rectangle split ignore empty parts},
+					level 1/.style = {sibling distance=20mm},
+					level 2/.style = {sibling distance=15mm}]
+
+\tikzstyle{leaf}=[rectangle split, below]
+\tikzstyle{normal_node} = [rectangle split, rectangle split horizontal,draw]
+
+\node[normal_node] {20 \nodepart{two} 27 \nodepart{three} 31} [->]
+	child {node[leaf] {2 \nodepart{two} 5 \nodepart{three} 6 \nodepart{four} 17}}
+	child {node[leaf] {20 \nodepart{two} 21 \nodepart{three} 24 \nodepart{four} 25}}
+	child {node[leaf] {27 \nodepart{two} 29 \nodepart{three} 30}}
+	child {node[leaf] {31 \nodepart{two} 32 \nodepart{three} \textcolor{red}{1}}}
+;
+\end{tikzpicture}
+\end{minipage}
+\begin{minipage}{0.5\textwidth}
+\begin{tikzpicture}[scale=0.8,every node/.style = {rectangle split ignore empty parts},
+					level 1/.style = {sibling distance=20mm},
+					level 2/.style = {sibling distance=15mm}]
+
+\tikzstyle{leaf}=[rectangle split, below]
+\tikzstyle{normal_node} = [rectangle split, rectangle split horizontal,draw]
+
+\node[normal_node] {20 \nodepart{two} 27 \nodepart{three} 31 \nodepart{four} 45} [->]
+	child {node[leaf] {2 \nodepart{two} 5 \nodepart{three} 6 \nodepart{four} 17}}
+	child {node[leaf] {20 \nodepart{two} 21 \nodepart{three} 24 \nodepart{four} 25}}
+	child {node[leaf] {27 \nodepart{two} 29 \nodepart{three} 30}}
+	child {node[leaf] {31 \nodepart{two} 32 \nodepart{three} 40}}
+	child {node[leaf] {45 \nodepart{two} 50 \nodepart{three} 70}}
+;
+\end{tikzpicture}
+\end{minipage}
+
+Når den ene løvnoden fylles opp til maks antall elementer, så må den splittes i halv til to nye løvnoder.
 
 %%% HASHING %%%
 \section{Hashing}
@@ -541,6 +653,8 @@ I tabell \ref{tab:hash} har vi forskjellige hash-tabeller på tallene \{4371, 13
 \paragraph{Separate chaining} her legges det nye tallet på i en liste om indeksen er opptatt fra før.
 
 
+\newpage
+
 %%% HEAP %%%
 \section{Heap}
 
@@ -558,10 +672,9 @@ Den maksimale høyden på treet vil være $\log_2(n)$.
 \end{itemize}
 
 \subsection{Eksempel på sletting i min-heap}
-Skal gjøre operasjonen \texttt{deleteMin()} på følgende heap $\times 3$.
+Skal gjøre operasjonen \texttt{deleteMin()} på følgende heap.
 
-\begin{center}
-\scalebox{0.8}{
+\begin{minipage}{0.5\textwidth}
 \begin{tikzpicture}[every node/.style={circle, draw=black, text width=0.3cm, align=center},
 				   level 1/.style={sibling distance=40mm},
 				   level 2/.style={sibling distance=20mm},
@@ -589,13 +702,11 @@ Skal gjøre operasjonen \texttt{deleteMin()} på følgende heap $\times 3$.
 	}
 ;
 \end{tikzpicture}
-}
-\end{center}
-
 Begynner med å slette rot noden 1. Og flytter siste element (8) opp til rot posisjon.
-
-\begin{center}
-\scalebox{0.8}{
+\end{minipage}
+\hspace{10pt}
+\begin{minipage}{0.5\textwidth}
+\vspace{-45pt}
 \begin{tikzpicture}[every node/.style={circle, draw=black, text width=0.3cm, align=center},
 				   level 1/.style={sibling distance=40mm},
 				   level 2/.style={sibling distance=20mm},
@@ -625,13 +736,10 @@ Begynner med å slette rot noden 1. Og flytter siste element (8) opp til rot pos
 
 \draw[->, red, thick] (A) to [out=45,in=45] (B);
 \end{tikzpicture}
-}
-\end{center}
-
 Får da dette resultatet. Og vi må nå flytte 8 ned til riktig posisjon.
+\end{minipage}
 
 \begin{minipage}{0.5\textwidth}
-\scalebox{0.8}{
 \begin{tikzpicture}[every node/.style={circle, draw=black, text width=0.3cm, align=center},
 				   level 1/.style={sibling distance=40mm},
 				   level 2/.style={sibling distance=20mm},
@@ -659,10 +767,8 @@ Får da dette resultatet. Og vi må nå flytte 8 ned til riktig posisjon.
 ;
 \draw[<->, red, thick] (A) to [out=90,in=45] (B);
 \end{tikzpicture}
-}
 \end{minipage}
 \begin{minipage}{0.5\textwidth}
-\scalebox{0.8}{
 \begin{tikzpicture}[every node/.style={circle, draw=black, text width=0.3cm, align=center},
 				   level 1/.style={sibling distance=40mm},
 				   level 2/.style={sibling distance=20mm},
@@ -690,7 +796,6 @@ Får da dette resultatet. Og vi må nå flytte 8 ned til riktig posisjon.
 ;
 \draw[<->, red, thick] (A) to [out=90,in=45] (B);
 \end{tikzpicture}
-}
 \end{minipage}
 
 
@@ -869,7 +974,7 @@ V & known & dist. & from\\
 \caption{Tabell til Dikjstra-algoritmen på grafen i figur \ref{fig:graph2}.}
 \end{table}
 
-\newpage
+
 \paragraph{Algoritmen} Her er pseudokoden for Dijkstra.
 
 \begin{Verbatim}[frame=single]
@@ -1029,6 +1134,8 @@ I&3&F\\
 \end{table}
 
 \textbf{MERK:} løsningen i figur \ref{fig:prim} er \textit{ikke} unik. Eneste måten man kan få et unikt resultat er om alle vektene på kantene er unike. Det samme gjelder for Kruskal.
+
+\newpage
 
 \subsection{Kruskal}
 \subsubsection{Framgangsmåte}
@@ -1315,6 +1422,85 @@ index&mismatch&shift\\
 \label{tab:gst}
 \end{table}
 
+\newpage
+\subsection{Huffman}
+\paragraph{Regler}
+\begin{enumerate}
+\item
+Hvert tegn som forekommer i teksten skal ha sin egen entydige kode.
+\item
+Ingen kode er prefiks i en annen kode.
+\end{enumerate}
+
+\paragraph{Algoritme}
+\begin{itemize}
+\item
+Lag en \textit{frekvenstabell} for alle tegn som forekommer i teksten.
+\item
+Betrakt hvert tegn som en node, og legg dem inn en prioritetskø P med frekvensen som vekt.
+\item
+Mens P har mer enn ett element:
+\begin{itemize}
+\item
+Ta ut de to minste nodene fra P.
+\item
+Gi dem en felles foreldrenode med vekt lik summen av de to nodenes vekter.
+\item
+Legg foreldrenoden inn i P.
+\end{itemize}
+\item
+Huffmankoden til et tegn (løvnode) får vi ved å gå fra roten og gi en '0' når vi går til venste og '1' når vi går til høyre.
+\item
+Resultatfilen består av to deler: en tabell over Huffmankoder med tilhørende tegn og den Huffmankodede datafilen.
+\end{itemize}
+
+\subsubsection{Eksempel på Huffmankoding}
+\begin{table}[h!]
+\centering
+\begin{tabular}{ccc}
+Karakter&Kode&Frekvens\\
+\hline
+n&11&4\\
+c&01&3\\
+o&101&2\\
+r&100&2\\
+e&001&2\\
+u&000&1\\
+\end{tabular}
+\caption{Eksempel på en Huffmantabell.}
+\label{tab:huffman}
+\end{table}
+
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}[every node/.style={inner sep=3pt},
+				   level 1/.style={sibling distance=30mm},
+				   level 2/.style={sibling distance=20mm},
+				   level 3/.style={sibling distance=15mm}]
+
+\node[circle]{14}
+	child {node[circle] {6} 
+		child {node[circle] {3} 
+			child {node[circle split] {u \nodepart{lower} 1} }
+			child {node[circle split] {e \nodepart{lower} 2} }
+		}
+		child {node[circle split] {c \nodepart{lower} 3} }
+	}
+	child {node[circle] {8} 
+		child {node[circle] {4} 
+			child {node[circle split] {r \nodepart{lower} 2} }
+			child {node[circle split] {o \nodepart{lower} 2} }
+		}
+	child {node[circle split] {n \nodepart{lower} 4} }
+	}
+;
+
+\end{tikzpicture}
+\label{fig:huffman}
+\caption{Huffmantreet for tabellen i tabell \ref{tab:huffman}.}
+\end{figure}
+
+
 
 %%% SORTERING %%%
 \section{Sortering}
@@ -1500,7 +1686,135 @@ Sortere på 10-er plassen: 8\textcolor{red}{0}2, 2, \textcolor{red}{2}4, \textco
 Sortere på 100 plassen: 2, 24, 45, 66, 75, 90, \textcolor{red}{1}70, \textcolor{red}{8}02
 \end{itemize}
 
+\newpage
 
+\section{Gamle eksamensoppgaver}
+Ved å gå gjennom alle gamle eksamensoppgaver (fra 2009 til 2013) og notere hvor mange poeng hver «pensum kategori» teller, så har jeg kommet fram til følgende skjema:
+
+\includegraphics[width=\textwidth]{stats.pdf}
+
+Det er helt klart binære trær, grafer, tekstalgoritmer, sortering og implementasjonsoppgaver som dominerer. I denne seksjonen skal jeg svare på noen eksamensoppgaver.
+
+\subsection{Tekstalgoritmer (oppgave 7, H2011)}
+\paragraph{7a) Beregn \textit{good suffix shift} av nålen: \texttt{a b c a b c a c a b}}
+I indeks 1, så ser vi at ikke-\texttt{a b} ikke eksisterer i nåla, dermed må vi flytte lik lengden av nåla som er 10. I indeks 2 finner vi at nålens prefiks \texttt{a b} er lik nålens suffix. For mismatch etter denne trenger vi ikke shifte lenger enn til når prefiks og suffix er justert til hverandre, altså shifte 8.
+\begin{center}
+\begin{tabular}{crc}
+indeks & mismatch & shift\\
+\hline
+0&\textcolor{red}{b}&1\\
+1&\textcolor{red}{a}b&10\\
+2&\textcolor{red}{c}ab&8\\
+3&\textcolor{red}{a}cab&5\\
+4&\textcolor{red}{c}acab&8\\
+5&\textcolor{red}{b}cacab&8\\
+6&\textcolor{red}{a}bcacab&8\\
+7&\textcolor{red}{c}abcacab&8\\
+8&\textcolor{red}{b}cabcacab&8\\
+9&\textcolor{red}{a}bcabcacab&8\\
+\end{tabular}
+\end{center}
+
+\newpage
+
+\paragraph{7b) En mismatch er funnet under leting etter nålen \texttt{a b c a b c a c a b} som angitt nedenfor:\vspace{-20pt}}
+\begin{Verbatim}
+Høystakk: a a c a b c a a b c a b c a b c a c a b
+     Nål: a b c a b c a c a b
+\end{Verbatim}
+\vspace{-30pt}
+\paragraph{Hvor i høystakken vil \textit{Boyer Moore}-algoritmen lete etter neste match? (dvs. hvor langt vil Boyer Moore skifte nålen etter denne mismatch?)}
+Med Boyer Moore bad character shift vil den gøre et shift på 2 for å lete etter neste match. Shift-tabellen må konstrueres:
+
+\begin{tabular}{cccc}
+\texttt{a}&\texttt{b}&\texttt{c}&\texttt{*}\\
+\hline
+1&5&2&10
+\end{tabular}
+
+\noindent Hvor \texttt{*} er alle andre karakterer enn \texttt{a}, \texttt{b} eller \texttt{c}. Og verdien er \texttt{value = length - index - 1}. Hvor length er lengden av nåla = 10. Og indeks er karakterens indeks i nåla:
+
+\begin{tabular}{rcccccccccc}
+Karakter&a&b&c&a&b&c&a&c&a&b\\
+Indeks&0&1&2&3&4&5&6&7&8&9\\
+\end{tabular}
+
+\noindent Verdien i shift-tabellen skal være lavest mulig, men kan ikke være mindre enn 1. For \texttt{a}, \texttt{b} og \texttt{c} blir det:
+
+\begin{tabular}{ccc}
+\texttt{a}&$10-8-1$&$=1$\\
+\texttt{b}&$10-4-1$&$=5$\\
+\texttt{c}&$10-7-1$&$=2$\\
+\end{tabular}
+
+\noindent I oppgaven er det mismatch på \texttt{c} i høystakken. Og siden shift-verdien til \texttt{c} er 2, så flyttes nåla 2 nedover høystakken for neste match.
+
+\begin{Verbatim}
+Høystakk: a a c a b c a a b c a b c a b c a c a b
+     Nål: a b c a b c a c a b
+   Shift: . . a b c a b c a c a b
+\end{Verbatim}
+
+\newpage
+
+\paragraph{7c) Lag en Huffmankode for strengen \texttt{nonconcurrence}. Vis dekodingstabellen.}
+Koden er ikke unik. For at koden skal være unik, så må karakterenes frekvens også være unik. Et eksempel kan være at \texttt{u} og \texttt{o} er naboer istedenfor \texttt{u} og \texttt{e}, da ville \texttt{o} hatt koden 001, og ikke 101.
+
+Huffmanntreet bygges ved å sette sammen de to og to laveste frekvensene til en ny frekvens-forelder. Dette gjør at den karakteren med høyst frekvens får korteste kode. Kantene til høyre telles som '1', og kantene til venstre som '0'.
+
+\begin{minipage}{0.5\textwidth}
+\begin{tabular}{crc}
+Karakter&Kode&Frekvens\\
+\hline
+n&11&4\\
+c&01&3\\
+o&101&2\\
+r&100&2\\
+e&001&2\\
+u&000&1\\
+\end{tabular}
+\end{minipage}
+\begin{minipage}{0.5\textwidth}
+\vspace{20pt}
+\begin{tikzpicture}[level distance=10mm, level 1/.style={sibling distance=30mm}, level 2/.style={sibling distance=15mm}]
+\node{14}
+	child { node {6} 
+		child { node {3} 
+			child { node[rectangle split, below] { u \nodepart{two} 1} }
+			child { node[rectangle split, below] { e \nodepart{two} 2} }
+		}
+		child { node[rectangle split, below] { c \nodepart{two} 3} }
+	}
+	child { node {8} 
+		child { node {4} 
+			child { node[rectangle split, below] { r \nodepart{two} 2} }
+			child { node[rectangle split, below] { o \nodepart{two} 2} }
+		}
+		child { node[rectangle split, below] { n \nodepart{two} 4} }		
+	}
+;
+\end{tikzpicture}
+\end{minipage}
+
+\subsection{Binære søketrær (oppgave 2, H2013)}
+\paragraph{2a) Gitt et binært søketre og et heltall $x$. Metoden \texttt{find} skal returnere noden $V$ som har verdi lik $x$ (du kan forutsette at den finnes). Fullfør de tre kodelinjene som starer med \texttt{return}.}
+
+\begin{lstlisting}[frame=none]
+class BinNode {
+	int value;
+	BinNode leftChild;
+	BinNode rightChild;
+
+	BinNode find (int x) {
+		if (value == x) 
+			return this;
+		else if (value < x)
+			return rightChild.find(x);
+		else
+			return leftChild.find(x);
+	}
+}
+\end{lstlisting}
 
 
 \newpage
@@ -1531,12 +1845,5 @@ Sortere på 100 plassen: 2, 24, 45, 66, 75, 90, \textcolor{red}{1}70, \textcolor
 
 
 \end{thebibliography}
-
-
-
-\newpage
-
-\listoftables
-\listoffigures
 
 \end {document}
