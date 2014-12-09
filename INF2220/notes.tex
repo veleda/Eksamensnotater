@@ -1275,13 +1275,48 @@ En sammenhengende urettet graf er \textbf{bi-connected} hvis det ikke er noen no
 
 Grafen i figur \ref{fig:graphbi} er \textit{ikke} bi-connected, fordi nodene A, I, G og H er articulation points.
 
-\subsubsection{DFS spanning-tre av figur \ref{fig:graphbi}}
-\begin{tikzpicture}[->, every node/.style={draw=black, circle}]
-\node{A}
-	child {node {B}}
-	child {node {C}};
-\end{tikzpicture}
 
+\begin{figure}[h!]
+\centering
+\scalebox{0.6}{
+\begin{tikzpicture}[->,auto,node distance=2cm,line width=0.4mm]
+\node[state] (A) {A$_1$};
+\node[state] (B) [below left of=A] {B$_2$};
+\node[state] (C) [below right of=A] {C$_{13}$};
+\node[state] (D) [below of=B] {D$_3$};
+\node[state] (F) [below of=D] {F$_4$};
+\node[state] (G) [below of=F] {G$_5$};
+\node[state] (I) [below of=G] {I$_8$};
+\node[state] (E) [left of=I] {E$_{12}$};
+\node[state] (H) [right of=I] {H$_6$};
+\node[state] (L) [below of=I] {L$_9$};
+\node[state] (M) [left of=L] {M$_{10}$};
+\node[state] (K) [below of=H] {K$_7$};
+\node[state] (J) [below of=M] {J$_{11}$};
+
+\path (A) edge node {} (B)
+		edge node {} (C)
+	(B) edge node {} (D)
+	(D) edge node {} (F)
+	(F) edge node {} (G)
+	(G) edge node {} (H)
+		edge node {} (I)
+		edge node {} (E)
+	(I) edge node {} (M)
+		edge node {} (L)
+	(H) edge node {} (K)
+	(M) edge node {} (J)
+	(E) edge [bend left, dashed] node {} (A)
+	(F) edge [bend left, dashed] node {} (B)
+	(J) edge [dashed] node {} (I)
+;
+\end{tikzpicture}
+}
+\caption{DFS spenntre for grafen i figur \ref{fig:graphbi}.}
+\label{fig:spanngraph}
+\end{figure}
+
+Når man går nedover kantene i grafen i figur \ref{fig:spanngraph}, så setter man kantene som \textit{\textbf{tree edges}}. Ubrukte kanter markeres som \textit{\textbf{back edges}}.
 
 \subsection{Strongly connected components (SCC)}
 \theoremstyle{mytheoremstyle}
@@ -1290,10 +1325,85 @@ Grafen i figur \ref{fig:graphbi} er \textit{ikke} bi-connected, fordi nodene A, 
 Gitt en rettet graf $\mathcal{G} = (\mathcal{V}, \mathcal{E})$. En \textbf{strongly connected component} av $\mathcal{G}$ er et maksimalt sett av noder $U \subseteq \mathcal{V}$. For alle $u_1, u_2 \in U$ har vi at $u \rightarrow^*u_2$ og $u_2\rightarrow^*u_1$.
 \end{scc}
 
+\begin{figure}[h!]
+\centering
+\scalebox{0.8}{
+\begin{tikzpicture}[->,auto,node distance=2cm,line width=0.4mm]
+  \node[state] 		(A)                    {a};
+  \node[state]         	(B) [right of=A] {b};
+  \node[state]		(C) [right of=B] {c};
+  \node[state]		(D) [right of=C] {d};
+  \node[state]		(E) [below of=A] {e};
+  \node[state]		(F) [right of=E] {f};
+  \node[state]		(G) [right of=F] {g};
+  \node[state]		(H) [right of=G] {h};
 
+  \path 	(A) edge node {} (B)
+		(B) edge node {} (C)
+		(B) edge node {} (F)
+		(B) edge node {} (E)
+		(C) edge [bend right] node {} (D)
+		(C) edge node {} (G)
+		(D) edge [bend right] node {} (C)
+		(D) edge [bend right] node {} (H)
+		(E) edge node {} (A)
+		(E) edge node {} (F)
+		(F) edge [bend right] node {} (G)
+		(G) edge [bend right] node {} (F)
+		(H) edge node {} (G)
+		(H) edge [bend right] node {} (D);
+\end{tikzpicture}
+}
+\caption{Eksempel på graf med noen SCCer.}
+\label{fig:scc}
+\end{figure}
+
+Måten man finner ut om en graf har SCCer er:
+\begin{enumerate}
+\item
+Gjør en DFS på grafen. Nummerér nodene.
+\item
+Reverser grafen og gjør en DFS i \textit{\textbf{avtagende}} rekkefølge.
+\end{enumerate}
+Man finner da gruppene med SCCer, det er grupper hvor alle nodene kan nå hverandre. I grafen i figur \ref{fig:scc} så er SCCene \{\{a, b, e\},\{f, g\},\{c, d, h\}\}.
+
+%%% KOMBINATORISK SØK %%%
 \section{Kombinatorisk søk}
-\section{Rekursjon}
+Kombinatorisk søk-algoritmer er ofte problemer som er NP-hard. Men problemene kan løses effektivt om de brytes ned. Et eksempel på et problem hvor man får bruk for kombinatorisk søk er å plassere åtte dronninger på et sjakkbrett. 
 
+\subsection{Permutasjoner}
+En permutasjon er å rearrangere objekter. For eksempel så fins det seks permutasjoner av settet \{1,2,3\}, som er: (1,2,3), (1,3,2), (2,1,3), (2,3,1), (3,1,2) og (3,2,1).
+
+\paragraph{Alle mulige permutasjoner av tallene fra 0 til $n-1$}.
+\begin{lstlisting}[frame=none]
+class Gen {
+	int[] p; int n;
+	boolean[] used;
+	
+	Gen (int i) {
+		n = i; p = new int[n];
+		used = new boolean[n];
+	
+		for (int j = 0; j < n; j++) {
+			used[j] = false;
+		}
+	}
+
+	void gen(int place) {
+		for (int number = 0; number < n; number++) {
+			if (!used[number]) {
+				used[number] = true;
+				p[place] = number;
+				
+				if (place < n-1) { gen(place+1); }
+				else { <deliver p to further use.> }
+				used[number] = false;
+			}
+		}
+	}
+}
+\end{lstlisting}
+\vspace{-30pt}
 %%% TEKSTALGORITMER %%%
 \section{Tekstalgoritmer}
 
@@ -1797,7 +1907,7 @@ u&000&1\\
 \end{minipage}
 
 \subsection{Binære søketrær (oppgave 2, H2013)}
-\paragraph{2a) Gitt et binært søketre og et heltall $x$. Metoden \texttt{find} skal returnere noden $V$ som har verdi lik $x$ (du kan forutsette at den finnes). Fullfør de tre kodelinjene som starer med \texttt{return}.}
+\paragraph{2a) Gitt et binært søketre og et heltall $x$. Metoden \texttt{find} skal returnere noden $V$ som har verdi lik $x$ (du kan forutsette at den finnes). Fullfør de tre kodelinjene som starer med \texttt{return}.}.
 
 \begin{lstlisting}[frame=none]
 class BinNode {
@@ -1815,6 +1925,63 @@ class BinNode {
 	}
 }
 \end{lstlisting}
+
+\newpage
+
+\subsection{Binære søketrær (oppgave 1, H2010)}
+
+\paragraph{1a) Tegn treet du får ved å sette disse verdiene: 9, 1, 3, 10, 4, 6, 7 og 8, inn i et tomt binært søketre (i den rekkefølgen).}
+
+\begin{center}
+\scalebox{0.8}{
+\begin{tikzpicture}[every node/.style={draw=black,circle},->,level distance=10mm]
+\node{9}
+	child {node {1}
+		child[draw=white] {node[draw=white] {}}
+		child {node {3}
+			child[draw=white] {node[draw=white] {}}
+			child {node {4}
+				child[draw=white] {node[draw=white] {}}
+				child {node {6}
+					child[draw=white] {node[draw=white] {}}
+					child {node {7}
+						child[draw=white] {node[draw=white] {}}
+						child {node {8}}
+					}
+				}
+			}
+		}
+	}
+	child {node {10}}
+;
+\end{tikzpicture}
+}
+\end{center}
+
+\paragraph{1b) Er det mulig å finne elementer i binærtreet fra oppgave 1a i logaritmisk ($\log_2$) tid? Begrunn svaret.}
+Nei. Fordi treet er ute av balanse. Treet inneholder 8 elementer, og $\log_2(8)=3$, og treet i oppgave 1a) er høyere enn det.
+
+\paragraph{1c) Fjern verdiene 1 og 3 fra binærtreet. Tegn binærtreet etter at de to elementene er blitt fjernet.}
+\begin{center}
+\scalebox{0.8}{
+\begin{tikzpicture}[every node/.style={draw=black,circle},->,level distance=10mm]
+\node{9}
+	child {node {4}
+		child[draw=white] {node[draw=white] {}}
+		child {node {6}
+			child[draw=white] {node[draw=white] {}}
+			child {node {7}
+				child[draw=white] {node[draw=white] {}}
+				child {node {8}}
+			}
+		}
+	}
+	child {node {10}}
+;
+\end{tikzpicture}
+}
+\end{center}
+
 
 
 \newpage
