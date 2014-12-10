@@ -51,7 +51,7 @@
   showspaces=false,               % show spaces adding particular underscores
   showstringspaces=true,         % underline spaces within strings
   showtabs=false,                 % show tabs within strings adding particular underscores
-  frame=true,                   % adds a frame around the code
+  frame=false,                   % adds a frame around the code
   rulecolor=\color{gray},        % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. commens (green here))
   tabsize=2,                      % sets default tabsize to 2 spaces
   captionpos=b,                   % sets the caption-position to bottom
@@ -321,6 +321,76 @@ function insert(root, data):
   else if (data > root.data)
     insert(root.right, data)
 \end{Verbatim}
+
+\subsubsection{Fjerne element}
+\begin{lstlisting}[frame=none]
+public boolean remove (int key) {
+	Node current, parent = root;
+	boolean isALeft = true;
+
+	while (current.key != key) {
+		parent = current;
+
+		if (key < current.key) {
+			isALeft = true;
+			current= current.left;
+		}
+		else {
+			isALeft = false;
+			current = current.right;
+		}
+		if (current == null)
+			return false;
+	}
+
+	if (current.left == null && current.right == null) {
+		if (current == root)
+			root == null;
+		else if (isALeft)
+			parent.left = null;
+		else 
+			parent.right = null;
+	}
+	else if (current.left == null) {
+		if (current == root)
+			root = current.right;
+		else if (isALeft)
+			parent.left = current.right;
+		else
+			parent.right = current.left;
+	}
+	else {
+		Node replacement = replace(current);
+	
+		if (current == root)
+			root = replacement;
+		else if (isALeft)
+			parent.left = replacement;
+		else
+			parent.right = replacement;
+		replacement.left = current.left;
+	}
+	return true;
+}
+
+public Node replace (Node replaceNode) {
+	Node replaceParent = replaceNode;
+	Node replacement = replaceNode;
+	Node current = replaceNode.right;
+
+	while (current != null) {
+		replaceParent = replacement;
+		replacement = current;
+		current = current.left;
+	}
+	if (replacement != replaceNode.right) {
+		replaceParent.left = replaceNode.right;
+		replaceNode.right = replacement.right;
+	}
+	return replaceNode;
+}
+\end{lstlisting}
+\vspace{-30pt}
 
 \subsection{Rød-svarte trær}
 \begin{definition}
