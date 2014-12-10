@@ -1498,6 +1498,64 @@ Reverser grafen og gjør en DFS i \textit{\textbf{avtagende}} rekkefølge.
 \end{enumerate}
 Man finner da gruppene med SCCer, det er grupper hvor alle nodene kan nå hverandre. I grafen i figur \ref{fig:scc} så er SCCene \{\{a, b, e\},\{f, g\},\{c, d, h\}\}.
 
+\paragraph{DFS på graf i figur \ref{fig:scc}} Starter i \textit{a}, og setter start- og sluttid for nodene vi besøker.
+
+\begin{tikzpicture}[every node/.style={draw=black,circle}]
+\node (a) at (0,0) {1/16};
+\node (b) at (2,0) {2/15};
+\node (c) at (4,0) {3/12};
+\node (d) at (6,0) {4/11};
+\node (e) at (0,-2) {13/14};
+\node (f) at (2,-2) {7/8};
+\node (g) at (4,-2) {6/9};
+\node (h) at (6,-2) {5/10};
+
+\draw[->, very thick, red] (a) to (b);
+\draw[->, very thick, red] (b) to (c);
+\draw[->, very thick, red] (c) to [bend left] (d);
+\draw[->, thick] (d) to [bend left] (c);
+\draw[->, very thick, red] (d) to [bend left] (h);
+\draw[->, thick] (h) to [bend left] (d);
+\draw[->, very thick, red] (h) to (g);
+\draw[->, thick] (c) to (g);
+\draw[->, very thick, red] (g) to [bend left] (f);
+\draw[->, thick] (f) to [bend left] (g);
+\draw[->, thick] (b) to (f);
+\draw[->, thick] (e) to (f);
+\draw[->, very thick, red] (b) to (e);
+\draw[->, thick] (e) to (a);
+\end{tikzpicture}
+
+Reverserer kantene og tar en ny DFS i avtagende rekkefølge:
+
+\begin{tikzpicture}[every node/.style={draw=black,circle}]
+\node[fill=red!30] (a) at (0,0) {1/16};
+\node[fill=red!30] (b) at (2,0) {2/15};
+\node[fill=blue!30] (c) at (4,0) {3/12};
+\node[fill=blue!30] (d) at (6,0) {4/11};
+\node[fill=red!30] (e) at (0,-2) {13/14};
+\node[fill=orange!30] (f) at (2,-2) {7/8};
+\node[fill=orange!30] (g) at (4,-2) {6/9};
+\node[fill=blue!30] (h) at (6,-2) {5/10};
+
+\draw[<-, very thick, red] (a) to (b);
+\draw[<-, thick] (b) to (c);
+\draw[<-, thick] (c) to [bend left] (d);
+\draw[<-, very thick, blue] (d) to [bend left] (c);
+\draw[<-, thick] (d) to [bend left] (h);
+\draw[<-, very thick, blue] (h) to [bend left] (d);
+\draw[<-, thick] (h) to (g);
+\draw[<-, thick] (c) to (g);
+\draw[<-, very thick, orange] (g) to [bend left] (f);
+\draw[<-, thick] (f) to [bend left] (g);
+\draw[<-, thick] (b) to (f);
+\draw[<-, thick] (e) to (f);
+\draw[<-, very thick, red] (b) to (e);
+\draw[<-, thick] (e) to (a);
+\end{tikzpicture}
+
+Da finner vi SCCene som nevnt over.
+
 \newpage
 
 %%% KOMBINATORISK SØK %%%
