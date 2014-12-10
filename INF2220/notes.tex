@@ -662,6 +662,30 @@ Alle løvnoder har mellom \textbf{L/2} og \textbf{L} elementer.
 
 Når den ene løvnoden fylles opp til maks antall elementer, så må den splittes i halv til to nye løvnoder.
 
+
+\paragraph{Sletting fra B-tre}
+\begin{enumerate}
+\item
+Finn riktig løvnode for tallet som skal slettes ved søking.
+\item
+Hvis løvnoden har minst \textbf{L/2+1} elementer, kan vi enkelt slette tallet.
+\item
+Hvis ikke, må løvnoden kombineres med en av nabonodene.
+\begin{enumerate}
+\item
+Hvis venstre/høyre søsken har minst \textbf{L/2+1} elementer, flytter vi det største/minste elementet over til løvnoden.
+\item
+Hvis søsken har akkurat \textbf{L/2} elementer, slår vi de to nodene sammen til en node (med L eller L-1 elementer).
+\end{enumerate}
+\item
+Gjenta punkt 3 dersom foreldrenoden har ett barn.
+\item
+Til slutt: hvis roten bare har ett barn, slettes denne og barnet blir ny rot.
+\end{enumerate}
+Husk å oppdatere nøkkelverdiene underveis!
+
+\newpage
+
 %%% HASHING %%%
 \section{Hashing}
 Idéen i hashing er å lagre alle elementene i en array (hashtabell) og la verdien i elementet $x$ bestemme indeksen til $x$ i hashtabellen. Egenskaper til en god hash-funksjon er at den er rask å beregne, kan gi alle mulige verdier fra 0 til tabellens størrelse $-1$. Og den git en god fordeling utover tabellindeksene. En hashtabell tilbyr innsetting, sletting og søking med konstant tid.
@@ -721,7 +745,6 @@ I tabell \ref{tab:hash} har vi forskjellige hash-tabeller på tallene \{4371, 13
 \paragraph{Dobbel probing} her lager vi en ny hash-funksjon når indeksen krasjer. Da tar man et tall $P$, som er det største primtallet som er mindre enn tabellstørrelsen. Dette brukes til å lage en ny hash-funksjon \texttt{H(X) = R - (X mod R)}.
 
 \paragraph{Separate chaining} her legges det nye tallet på i en liste om indeksen er opptatt fra før.
-
 
 \newpage
 
@@ -1041,19 +1064,19 @@ V & known & dist. & from&known&dist.&from&known&dist.&from\\
 7 & F & -- & 0&F&--&0&F&--&0\\
 \hline
 \hline
-&&\textbf{6}&&&\textbf{4}&&&\textbf{7}\\
+&&\textbf{4}&&&\textbf{2}&&&\textbf{6}\\
 V & known & dist. & from&known&dist.&from&known&dist.&from\\
 \hline
 1&T&0&0&T&0&0&T&0&0\\
-2&F&5&1&F&5&1&F&5&1\\
+2&F&5&1&T&5&1&T&5&1\\
 3&T&2&1&T&2&1&T&2&1\\
-4&F&4&1&T&4&1&T&4&1\\
+4&T&4&1&T&4&1&T&4&1\\
 5&F&--&0&F&--&0&F&--&0\\
-6&T&9&3&T&6&4&T&6&4\\
-7&F&--&0&F&10&4&T&10&4\\
+6&F&6&4&F&6&4&T&6&4\\
+7&F&10&4&F&10&4&F&10&4\\
 \hline
 \hline
-&&\textbf{2}&\\
+&&\textbf{7}&\\
 V & known & dist. & from\\
 \cline{1-4}
 1&T&0&0\\
@@ -2240,6 +2263,7 @@ Resten av nodene henger sammen, og blir neste SCC: \{\{c\},\{d,f,e,b,a\}\}.
 \end{center}
 
 E, F og D er \textit{articulation points} for denne grafen. Spenntreet over starter med A som rot-noden.
+
 
 
 \newpage
