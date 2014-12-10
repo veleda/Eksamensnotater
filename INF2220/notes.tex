@@ -21,6 +21,7 @@
 
 \usepackage[margin=2.5cm]{geometry}
 
+% Two column table of content
 \usepackage[toc]{multitoc}
 \renewcommand*{\multicolumntoc}{2}
 \setlength{\columnseprule}{0.5pt}
@@ -28,11 +29,6 @@
 
 \usetikzlibrary{arrows}
 \usetikzlibrary{shapes, automata}
-
-
-\newcommand{\intt}{integritetsregler}
-\newcommand{\inttt}{integritetsregel}
-\newcommand{\Intt}{Integritetsregler}
  
 \definecolor{dkgreen}{rgb}{0,0.6,0}
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
@@ -52,7 +48,7 @@
   showstringspaces=true,         % underline spaces within strings
   showtabs=false,                 % show tabs within strings adding particular underscores
   frame=false,                   % adds a frame around the code
-  rulecolor=\color{gray},        % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. commens (green here))
+  rulecolor=\color{white},        % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. commens (green here))
   tabsize=2,                      % sets default tabsize to 2 spaces
   captionpos=b,                   % sets the caption-position to bottom
   breaklines=true,                % sets automatic line breaking
@@ -63,7 +59,7 @@
   commentstyle=\color{dkgreen},       % comment style
   stringstyle=\color{mauve},         % string literal style
   escapeinside={\%*}{*)},            % if you want to add LaTeX within your code
-  morekeywords={*,..,}               % if you want to add more keywords to the set
+  morekeywords={*,..,function}               % if you want to add more keywords to the set
 }
 
 \setlength{\parskip}{5mm}
@@ -107,8 +103,7 @@ $$f(n) \leq c g(n).$$
 Når $f(n) = O(g(n))$, sier vi at $g(n)$ er \textbf{upper bound} for $f(n)$, eller mer presist at $g(n)$ er \textbf{asymptotic upper bound} for $f(n)$.
 \end{definition}
 
-\begin{table}[h!]
-\centering
+\begin{minipage}{0.35\textwidth}
 \begin{tabular}{rl}
 \textbf{Funksjon}&\textbf{Navn}\\
 $1$&Konstant\\
@@ -120,12 +115,8 @@ $n^3$&Kubisk\\
 $2^n$&Eksponensiell\\
 $n!$&\\
 \end{tabular}
-\label{tab:ofunc}
-\caption{Vanlige funksjoner for O$(n)$}
-\end{table}
-
-\begin{figure}[h!]
-\centering
+\end{minipage}
+\begin{minipage}{0.5\textwidth}
 \begin{tikzpicture}
 \draw[thick, ->] (0,0) -- (5,0) node[below] {Input size  (N)};
 \draw[thick, ->] (0,0) -- (0,5) node[left] {Running time};
@@ -140,19 +131,16 @@ $n!$&\\
 \draw[black, domain=0:1.7] plot (\x, {\x^3}) node[right] {$n^3$};
 \draw[orange, domain=0:2.7] plot (\x, {2*\x}) node [right] {$2n$};
 \end{tikzpicture}
-\label{fig:ofunc}
-\caption{Noen funksjoner for O$(n)$.}
-\end{figure}
-
-\newpage
+\end{minipage}
 
 \subsection{Analyse av kjøretid}
 Når man analyserer en algoritme, så må man se på \textit{stegene} den bruker og analysere de hver for seg. Ta for eksempel denne kodesnutten:
-\begin{Verbatim}[frame=single]
+\begin{lstlisting}
 for (i = 0; i < n; i++)
   for (j = 0; j < m; j++)
     array[i][j] = 0;
-\end{Verbatim}
+\end{lstlisting}
+\vspace{-20pt}
 
 \noindent To steg:\vspace{-15pt}
 \begin{enumerate}
@@ -167,14 +155,11 @@ Dette gir O(n) $\times$ O(m) = O(n$^2$).
 \subsection{Logaritmisk tid}
 Algoritmer som tar logaritmisk tid, O$(\log n)$, finner man i operasjoner på binære trær, eller når man bruker binære søk og i \textit{divide and conquer}-algoritmer. 
 
-\begin{figure}[h!]
-\begin{Verbatim}[frame=single]
+\begin{lstlisting}
 for (i = 1; i < n; i = i * 2)
     sum++;
-\end{Verbatim}
+\end{lstlisting}
 \vspace{-15pt}
-\caption{Eksempel på løkke som går i O(log n).}
-\end{figure}
 
 \newpage
 
@@ -225,6 +210,8 @@ public void postOrder (Node node) {
 	}
 }
 \end{lstlisting}
+
+\vspace{-25pt}
 
 % Terminologi
 \subsection{Terminologi}
@@ -285,7 +272,6 @@ Det eksisterer en \textbf{unik} sti fra roten til enhver node i treet.
 \caption{Eksempel på et binært søketre.}
 \end{figure}
 
-\subsubsection{Tidkompleksitet}
 \begin{table}[h!]
 \centering
 \begin{tabular}{rll}
@@ -299,9 +285,8 @@ Det eksisterer en \textbf{unik} sti fra roten til enhver node i treet.
 \caption{Tidkompleksitet for BST.}
 \end{table}
 
-\newpage
 \subsubsection{Søking}
-\begin{Verbatim}[frame=single]
+\begin{lstlisting}
 function find(key, node):
   if node = Null or node.key = key then
     return node
@@ -309,10 +294,12 @@ function find(key, node):
     return find(key, node.left)
   else
     return find(key, node.right)
-\end{Verbatim}
+\end{lstlisting}
+
+\vspace{-25pt}
 
 \subsubsection{Sette inn}
-\begin{Verbatim}[frame=single]
+\begin{lstlisting}
 function insert(root, data):
   if (!root)
     root = new Node(data)
@@ -320,7 +307,7 @@ function insert(root, data):
     insert(root.left, data)
   else if (data > root.data)
     insert(root.right, data)
-\end{Verbatim}
+\end{lstlisting}
 
 \subsubsection{Fjerne element}
 \begin{lstlisting}[frame=none]
@@ -397,6 +384,7 @@ public Node replace (Node replaceNode) {
 \emph{\textbf{Rød-svart tre}}
 En datastruktur som er et \textbf{selv-balanserende} binært søketre. Følgende skal gjelde for et rød-svart tre:
 \begin{enumerate}
+\vspace{-15pt}
 \item
 En node er enten rød eller sort.
 \item
@@ -407,6 +395,7 @@ Alle løvnoder (NIL) er sorte---alle løvnoder har samme farge som roten.
 Enhver røde node må ha to sorte barn.
 \item
 Enhver sti fra roten til en løvnode skal inneholde samme antall sorte noder.
+\vspace{-15pt}
 \end{enumerate}
 Dette sikrer at høyden på et slikt tre er maks $2\times\log_2(N+1)$.
 \end{definition}
@@ -426,6 +415,7 @@ Dette sikrer at høyden på et slikt tre er maks $2\times\log_2(N+1)$.
 						minimum width=0.3cm, minimum height=0.3cm}
 }
 
+\newpage
 
 \subsubsection{Eksempel på innsetting}
 \begin{figure}[h!]
@@ -496,7 +486,7 @@ Setter inn 41 og 38 etter reglene.
 			child{node[node_red] {8}}
 			child{node[node_null] {nil}}
 		}
-		child {node[node_red] {31}}
+		child {node[node_black] {31}}
 	}
 	child {node [node_black] {41}}
 ;
@@ -700,6 +690,7 @@ int hash (String key, int tableSize) {
 	return (hashValue % tableSize);
 }
 \end{lstlisting}
+\vspace{-45pt}
 
 \subsection{Forskjellige typer hash-tabeller}
 \begin{itemize}
@@ -709,11 +700,11 @@ int hash (String key, int tableSize) {
 \textbf{Probing} er rommet mellom hver indeks.
 \begin{itemize}
 \item
-\textit{Lineær probing}; intervallene er satt (normalt 1).
+\textit{Lineær probing}: intervallene er satt (normalt 1).
 \item
-\textit{Kvadratisk probing}; intervallene øker med å legge til et kvadratisk polynom ved startverdi gitt av hashberegningen.
+\textit{Kvadratisk probing}: intervallene øker med å legge til et kvadratisk polynom ($1^2=1, 2^2=4, 3^2=5,\dots$ ved startverdi gitt av hashberegningen.
 \item
-\textit{Dobbel hashing}; intervallene er gitt av en annen hash-funksjon.
+\textit{Dobbel hashing}: intervallene er gitt av en annen hash-funksjon. \texttt{H$_2$(X) = R-(X mod R)}, hvor \texttt{R} er det største primtallet som er \textit{mindre} enn tabellstørrelsen.
 \end{itemize}
 \end{itemize}
 
@@ -737,16 +728,6 @@ Index & Linear probing & Quadratic probing & Separate chaining\\
 \caption{Eksempel på hashing.}
 \end{table}
 I tabell \ref{tab:hash} har vi forskjellige hash-tabeller på tallene \{4371, 1323, 4199, 4344, 9679, 1989\} som skal settes inn i en tabell på størrelse 10, og med hash-funksjon \texttt{H(X) = X mod 10}.
-
-\paragraph{Lineær probing} her tar man tallet og setter inn i hash-funksjonen. Så for første tall (4371) vil indeksen bli 1. Hvis indeksen er opptatt, så plusser man på 1.
-
-\paragraph{Kvadratisk probing} er så og si det samme, men i stedet for å legge til 1 hvis indeksen er opptatt, så legger man på $1^2 = 1, 2^2 = 4, 3^2 = 5, 4^2 = 16\dots$ 
-
-\paragraph{Dobbel probing} her lager vi en ny hash-funksjon når indeksen krasjer. Da tar man et tall $P$, som er det største primtallet som er mindre enn tabellstørrelsen. Dette brukes til å lage en ny hash-funksjon \texttt{H(X) = R - (X mod R)}.
-
-\paragraph{Separate chaining} her legges det nye tallet på i en liste om indeksen er opptatt fra før.
-
-\newpage
 
 %%% HEAP %%%
 \section{Heap}
@@ -804,7 +785,7 @@ Begynner med å slette rot noden 1. Og flytter siste element (8) opp til rot pos
 				   level 1/.style={sibling distance=40mm},
 				   level 2/.style={sibling distance=20mm},
 				   level 3/.style={sibling distance=10mm}]
-\node[draw=red, thick, forbidden sign] (B) {1}
+\node[draw=red, thick, fill=red!40] (B) {1}
 	child {node {3}
 		child {node {6}
 			child {node {15}}
@@ -827,7 +808,7 @@ Begynner med å slette rot noden 1. Og flytter siste element (8) opp til rot pos
 	}
 ;
 
-\draw[->, red, thick] (A) to [out=45,in=45] (B);
+\draw[->, red, thick] (A) to (B);
 \end{tikzpicture}
 Får da dette resultatet. Og vi må nå flytte 8 ned til riktig posisjon.
 \end{minipage}
@@ -858,7 +839,7 @@ Får da dette resultatet. Og vi må nå flytte 8 ned til riktig posisjon.
 		}
 	}
 ;
-\draw[<->, red, thick] (A) to [out=90,in=45] (B);
+\draw[<->, red, thick] (A) to [bend right] (B);
 \end{tikzpicture}
 \end{minipage}
 \begin{minipage}{0.5\textwidth}
@@ -887,10 +868,11 @@ Får da dette resultatet. Og vi må nå flytte 8 ned til riktig posisjon.
 		}
 	}
 ;
-\draw[<->, red, thick] (A) to [out=90,in=45] (B);
+\draw[<->, red, thick] (A) to [bend right] (B);
 \end{tikzpicture}
 \end{minipage}
 
+\newpage
 
 %%% GRAFER %%%
 \section{Grafer}
@@ -1463,11 +1445,13 @@ Grafen i figur \ref{fig:graphbi} er \textit{ikke} bi-connected, fordi nodene A, 
 
 Når man går nedover kantene i grafen i figur \ref{fig:spanngraph}, så setter man kantene som \textit{\textbf{tree edges}}. Ubrukte kanter markeres som \textit{\textbf{back edges}}.
 
+\newpage
+
 \subsection{Strongly connected components (SCC)}
 \theoremstyle{mytheoremstyle}
 \newtheorem{scc}{Definisjon}[subsection]
 \begin{scc}
-Gitt en rettet graf $\mathcal{G} = (\mathcal{V}, \mathcal{E})$. En \textbf{strongly connected component} av $\mathcal{G}$ er et maksimalt sett av noder $U \subseteq \mathcal{V}$. For alle $u_1, u_2 \in U$ har vi at $u \rightarrow^*u_2$ og $u_2\rightarrow^*u_1$.
+Gitt en rettet graf $\mathcal{G} = (\mathcal{V}, \mathcal{E})$. En \textbf{strongly connected component} av $\mathcal{G}$ er et maksimalt sett av noder $U \subseteq \mathcal{V}$. For alle $u_1, u_2 \in U$ har vi at $u_1 \rightarrow^*u_2$ og $u_2\rightarrow^*u_1$.
 \end{scc}
 
 \begin{figure}[h!]
@@ -1505,12 +1489,16 @@ Gitt en rettet graf $\mathcal{G} = (\mathcal{V}, \mathcal{E})$. En \textbf{stron
 
 Måten man finner ut om en graf har SCCer er:
 \begin{enumerate}
+\vspace{-15pt}
 \item
 Gjør en DFS på grafen. Nummerér nodene.
 \item
 Reverser grafen og gjør en DFS i \textit{\textbf{avtagende}} rekkefølge.
+\vspace{-15pt}
 \end{enumerate}
 Man finner da gruppene med SCCer, det er grupper hvor alle nodene kan nå hverandre. I grafen i figur \ref{fig:scc} så er SCCene \{\{a, b, e\},\{f, g\},\{c, d, h\}\}.
+
+\newpage
 
 %%% KOMBINATORISK SØK %%%
 \section{Kombinatorisk søk}
