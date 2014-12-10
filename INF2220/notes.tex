@@ -716,7 +716,7 @@ I tabell \ref{tab:hash} har vi forskjellige hash-tabeller på tallene \{4371, 13
 
 \paragraph{Lineær probing} her tar man tallet og setter inn i hash-funksjonen. Så for første tall (4371) vil indeksen bli 1. Hvis indeksen er opptatt, så plusser man på 1.
 
-\paragraph{Kvadratisk probing} er så og si det samme, men i stedet for å legge til 1 hvis indeksen er opptatt, så legger man på $1^2, 2^2, 3^2,\dots$
+\paragraph{Kvadratisk probing} er så og si det samme, men i stedet for å legge til 1 hvis indeksen er opptatt, så legger man på $1^2 = 1, 2^2 = 4, 3^2 = 5, 4^2 = 16\dots$ 
 
 \paragraph{Dobbel probing} her lager vi en ny hash-funksjon når indeksen krasjer. Da tar man et tall $P$, som er det største primtallet som er mindre enn tabellstørrelsen. Dette brukes til å lage en ny hash-funksjon \texttt{H(X) = R - (X mod R)}.
 
@@ -1492,10 +1492,11 @@ Man finner da gruppene med SCCer, det er grupper hvor alle nodene kan nå hveran
 %%% KOMBINATORISK SØK %%%
 \section{Kombinatorisk søk}
 Kombinatorisk søk-algoritmer er ofte problemer som er NP-hard. Men problemene kan løses effektivt om de brytes ned. Et eksempel på et problem hvor man får bruk for kombinatorisk søk er å plassere åtte dronninger på et sjakkbrett. 
-
+\vspace{-10pt}
 \subsection{Permutasjoner}
-En permutasjon er å rearrangere objekter. For eksempel så fins det seks permutasjoner av settet \{1,2,3\}, som er: (1,2,3), (1,3,2), (2,1,3), (2,3,1), (3,1,2) og (3,2,1).
 
+En permutasjon er å rearrangere objekter. For eksempel så fins det seks permutasjoner av settet \{1,2,3\}, som er: (1,2,3), (1,3,2), (2,1,3), (2,3,1), (3,1,2) og (3,2,1).
+\vspace{-20pt}
 \paragraph{Alle mulige permutasjoner av tallene fra 0 til $n-1$}.
 \begin{lstlisting}[frame=none]
 class Gen {
@@ -1520,10 +1521,6 @@ class Gen {
 				if (place < n-1) { gen(place+1); }
 				else { <deliver p to further use.> }
 				used[number] = false;
-			}
-		}
-	}
-}
 \end{lstlisting}
 \vspace{-30pt}
 %%% TEKSTALGORITMER %%%
@@ -2103,6 +2100,7 @@ Nei. Fordi treet er ute av balanse. Treet inneholder 8 elementer, og $\log_2(8)=
 \end{tikzpicture}
 }
 \end{center}
+Fjerningen går bra, fordi 1 og 3 kun har ett høyre barn hver. Da kan 3 sitt høyre barn bare flyttes opp til plassen 1 hadde, så er 1 og 3 fjernet.
 
 \newpage
 
@@ -2188,6 +2186,60 @@ Ingen måte å nå nr. 5 på fra nr. 6. Så \{\{c\}\} er første SCC.
 Resten av nodene henger sammen, og blir neste SCC: \{\{c\},\{d,f,e,b,a\}\}.
 \end{minipage}
 
+\subsection{Grafer (oppgave 3, H2013)}
+\paragraph{3a) Finn alle \textit{articulation points} for grafen under. Vis et dybde først-spenntre som starter fra node $A$ samt \textit{Num-} og \textit{Low-}numrene for hver node.}
+
+\begin{center}
+\scalebox{0.6}{
+\begin{tikzpicture}[scale=1.6,every node/.style={draw=black, circle}]
+\node (A) at (0,0) {A};
+\node (D) at (1,1) {D};
+\node (C) at (2,-0.5) {C};
+\node (B) at (2,3) {B};
+\node (F) at (4,3) {F};
+\node (E) at (3,1) {E};
+\node (G) at (2,1.5) {G};
+\node (H) at (5,1) {H};
+\node (J) at (4.5,-0.5) {J};
+\node (I) at (3.5,-0.5) {I};
+
+\draw (A) -- (D) -- (C) -- (A) -- (D) -- (E) -- (G) -- (E) -- (F) -- (B) -- (D) -- (E) -- (F) -- (I) -- (J) -- (H) -- (F);
+\end{tikzpicture}
+}
+\end{center}
+
+\begin{center}
+\scalebox{0.7}{
+\begin{tikzpicture}[scale=2,every node/.style={draw=black, circle}]
+\node (A) at (0,0) {A$_{1,1}$};
+\node (D) at (1,1) {D$_{2,1}$};
+\node (C) at (2,-0.5) {C$_{10,1}$};
+\node (B) at (2,3) {B$_{3,2}$};
+\node (F) at (4,3) {F$_{4,2}$};
+\node (E) at (3,1) {E$_{5,2}$};
+\node (G) at (2,1.5) {G$_{6,6}$};
+\node (H) at (5,1) {H$_{7,4}$};
+\node (J) at (4.5,-0.5) {J$_{8,4}$};
+\node (I) at (3.5,-0.5) {I$_{9,4}$};
+
+\draw[->, very thick] (A) to (D);
+\draw[->, very thick] (A) to (D);
+\draw[->, very thick] (D) to (C);
+\draw[->, very thick, dashed] (C) to (A);
+\draw[->, very thick] (D) to (B);
+\draw[->, very thick] (B) to (F);
+\draw[->, very thick] (F) to (E);
+\draw[->, very thick] (E) to (G);
+\draw[->, very thick] (F) to (H);
+\draw[->, very thick] (J) to (I);
+\draw[->, very thick] (H) to (J);
+\draw[->, very thick, dashed] (I) to (F);
+\draw[->, very thick, dashed] (E) to (D);
+\end{tikzpicture}
+}
+\end{center}
+
+E, F og D er \textit{articulation points} for denne grafen. Spenntreet over starter med A som rot-noden.
 
 
 \newpage
