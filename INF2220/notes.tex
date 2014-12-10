@@ -889,6 +889,30 @@ else
     return L (a topofically sorted order)
 \end{Verbatim}
 
+\begin{lstlisting}[frame=none]
+public List<E> topologicalSort (List<E> graph) {
+	boolean[] visited = new boolean[graph.length];
+	List<E> result = new ArrayList<>();
+
+	for (int i = 0; i < graph.length; i++) {
+		if (!visited[i])
+			DFS(graph, visited, result, i);
+	}
+	return result;
+}
+
+public void DFS (List<E> graph, boolean[] visited, List<E> result, int i) {
+	visited[i] = true;
+	
+	for (int v : graph[i]) {
+		if (!visited[v])
+			DFS(graph, visited, result, v);
+	}
+	result.add(i);
+}
+\end{lstlisting}
+\vspace{-30pt}
+
 \subsection{Dijkstra}
 \begin{enumerate}
 \item
@@ -1003,8 +1027,36 @@ function Dijkstra (Graph, source):
     return distance;
 end function;
 \end{Verbatim}
-
 \newpage
+\begin{lstlisting}[frame=none]
+class Edge {
+	final Vertex target;
+	final double weight;
+}
+
+public void dijkstra (Vertex source) {
+	source.minDistance = 0;
+	PriorityQueue<Vertex> vertexQueue = new PriorityQueue<Vertex>();
+	vertexQueue.add(source);
+
+	while (!vertexQueue.isEmpty()) {
+		Vertex u = vertexQueue.poll();
+	
+		for (Edge e : u.adjacencies) {
+			Vertex v = e.target;
+			double weight = e.weight;
+			double distanceThroughU = u.minDistance + weight;
+	
+			if (distanceThroughU < v.minDistance) {
+				vertexQueue.remove(v);
+				v.minDistance = distanceThroughU;
+				v.previous = u;
+				vertexQueue.add(v);
+			}
+		}
+	}
+}
+\end{lstlisting}
 
 \subsection{Prim}
 \begin{figure}[h!]
@@ -1981,6 +2033,90 @@ Nei. Fordi treet er ute av balanse. Treet inneholder 8 elementer, og $\log_2(8)=
 \end{tikzpicture}
 }
 \end{center}
+
+\newpage
+
+\subsection{SCC (oppgave 1b, H2012)}
+\paragraph{1b) Anta den rettete grafen $G$ med noder $a, \dots, f$ i figuren under.}
+
+\begin{center}
+\scalebox{0.8}{
+\begin{tikzpicture}[every node/.style={draw=black, circle}]
+\node (a) at (0,0) {a};
+\node (b) at (3,0) {b};
+\node (c) at (1.5,1.2) {c};
+\node (d) at (-1,2) {d};
+\node (e) at (4,2) {e};
+\node (f) at (1.5,3.5) {f};
+
+\draw[->,thick] (a) to (b);
+\draw[->,thick] (b) to [bend left] (e);
+\draw[->,thick] (e) to [bend left] (b);
+\draw[->,thick] (b) to (c);
+\draw[->,thick] (a) to (c);
+\draw[->,thick] (a) to (f);
+\draw[->,thick] (d) to (a);
+\draw[->,thick] (f) to (d);
+\draw[->,thick] (e) to (f);
+\end{tikzpicture}
+}
+\end{center}
+
+\paragraph{1. Hvilke sterkt sammenhengende komponenter har vi i $G$? Bare lag en liste.} \{\{c\},\{d,f,e,b,a\}\}.
+
+\paragraph{2. Vis hvordan SCCs er bestemt algoritmisk. Gi trinnene i algoritmen. Ett trinn skal tilsvare å følge en kant i grafen mellom traversering, ikke mer detaljert enn det.}
+
+Først gjør en DFS på grafen. Starter i $a$: $a\rightarrow b \rightarrow e \rightarrow f \rightarrow d \rightarrow a \rightarrow c$. Så reversér kantene og gjør en ny DFS i avtagende rekkefølge.
+
+\begin{minipage}{0.4\textwidth}
+\scalebox{0.8}{
+\begin{tikzpicture}[every node/.style={draw=black, circle}]
+\node (a) at (0,0) {1};
+\node (b) at (3,0) {2};
+\node[fill=red!30] (c) at (1.5,1.2) {6};
+\node (d) at (-1,2) {5};
+\node (e) at (4,2) {3};
+\node (f) at (1.5,3.5) {4};
+
+\draw[<-,thick] (a) to (b);
+\draw[<-,thick] (b) to [bend left] (e);
+\draw[<-,thick] (e) to [bend left] (b);
+\draw[<-,thick] (b) to (c);
+\draw[<-,thick] (a) to (c);
+\draw[<-,thick] (a) to (f);
+\draw[<-,thick] (d) to (a);
+\draw[<-,thick] (f) to (d);
+\draw[<-,thick] (e) to (f);
+\end{tikzpicture}
+}
+\newline
+Ingen måte å nå nr. 5 på fra nr. 6. Så \{\{c\}\} er første SCC.
+\end{minipage}
+\hspace{10pt}
+\begin{minipage}{0.5\textwidth}
+\scalebox{0.8}{
+\begin{tikzpicture}[every node/.style={draw=black, circle}]
+\node[fill=red!30] (a) at (0,0) {1};
+\node[fill=red!30] (b) at (3,0) {2};
+\node[fill=black!30] (c) at (1.5,1.2) {6};
+\node[fill=red!30] (d) at (-1,2) {5};
+\node[fill=red!30] (e) at (4,2) {3};
+\node[fill=red!30] (f) at (1.5,3.5) {4};
+
+\draw[<-,thick] (a) to (b);
+\draw[<-,thick] (b) to [bend left] (e);
+\draw[<-,thick] (e) to [bend left] (b);
+\draw[<-,thick] (b) to (c);
+\draw[<-,thick] (a) to (c);
+\draw[<-,thick] (a) to (f);
+\draw[<-,thick] (d) to (a);
+\draw[<-,thick] (f) to (d);
+\draw[<-,thick] (e) to (f);
+\end{tikzpicture}
+}
+\newline
+Resten av nodene henger sammen, og blir neste SCC: \{\{c\},\{d,f,e,b,a\}\}.
+\end{minipage}
 
 
 
