@@ -379,6 +379,8 @@ public Node replace (Node replaceNode) {
 \end{lstlisting}
 \vspace{-30pt}
 
+
+%%% Rød-svarte trær
 \subsection{Rød-svarte trær}
 \begin{definition}
 \emph{\textbf{Rød-svart tre}}
@@ -402,106 +404,139 @@ Dette sikrer at høyden på et slikt tre er maks $2\times\log_2(N+1)$.
 
 
 \tikzset{
-	treenode/.style = {align=center, inner sep=0pt},
+	treenode/.style = {align=center, inner sep=-8pt},
 	% Sorte noder
 	node_black/.style = {treenode, circle, white,
 						font=\bfseries, draw=black,
-						fill=black, text width=0.8cm},
+						fill=black, text width=0.5cm},
 	% Røde noder
-	node_red/.style = {treenode, circle, red, draw=red,
-						text width=0.8cm, very thick},
+	node_red/.style = {treenode, circle, red, fill=red,
+						text width=0.5cm, very thick},
 	% Null-pekere
 	node_null/.style = {white, treenode, rectangle, draw=black, fill=black,
 						minimum width=0.3cm, minimum height=0.3cm}
 }
 
-\newpage
+\subsubsection{Situasjoner som kan oppstå.}
+Det er tre situasjoner som kan oppstå i rød-svarte trær.
 
-\subsubsection{Eksempel på innsetting}
-\begin{figure}[h!]
-\centering
-\begin{tabular}{p{4cm}p{4cm}p{4cm}}
-1&2&3\\
-\scalebox{0.8}{
-\begin{tikzpicture}[level 1/.style={sibling distance=20mm},
-				   level 2/.style={sibling distance=10mm, level distance=10mm}]
-\node[node_black]{41}
-	child {node[node_red] {38}
-		child {node[node_null] {nil}}
-		child {node[node_null] {nil}}
-	}
-	child {node [node_null] {nil}}
-;
-\end{tikzpicture}
-}
+\begin{enumerate}
+\vspace{-15pt}
+\item
+Onkelen er rød, skal da bytte farge mellom besteforelder og forelder/onkel.
+\item
+Høyre og venstre eller venstre og høyre, rotér forelder, så rotér besteforelder.
+\item
+Høyre og høyre eller venste og venstre, så rotér besteforelder.
+\end{enumerate}
+
+
+\begin{minipage}{0.35\textwidth}
+\begin{tabular}{lll}
+&\textbf{Case 1}&$\rightarrow$\\
 &
-\scalebox{0.8}{
-\begin{tikzpicture}[level 1/.style={sibling distance=20mm},
-				   level 2/.style={sibling distance=10mm, level distance=10mm}]
-\node[node_black]{38}
-	child {node[node_red] {31}}
-	child {node [node_red] {41}}
-;
-\end{tikzpicture}
-}
-&
-\scalebox{0.8}{
-\begin{tikzpicture}[level 1/.style={sibling distance=20mm},
-				   level 2/.style={sibling distance=10mm}]
-\node[node_black]{38}
-	child {node[node_black] {31}
-		child {node[node_null] {nil}}
-		child {node[node_red] {12}
-		}
+\begin{tikzpicture}[scale=0.6]
+\node[node_black] {}
+	child {node[node_red] {}
+		child {node[node_red] {}}
+		child[white] {node[fill=white] {}}
 	}
-	child {node [node_black] {41}}
+	child {node[node_red] {}}
 ;
 \end{tikzpicture}
-}
-\\
-Setter inn 41 og 38 etter reglene. 
-& Når 31 nå kommer inn, så må vi snu på treet og farge om 38 og 41. 
-& Siden løvnodene var røde når 12 skal inn, så må 31 og 41 farges om. 41 skal farges iht. regel nr. 3.\\
-\scalebox{0.8}{
-\begin{tikzpicture}[level 1/.style={sibling distance=20mm},
-				   level 2/.style={sibling distance=10mm}]
-\draw[black] (0,1) node[above]{4.};
-\node[node_black]{38}
-	child {node[node_red] {19}
-		child {node[node_black] {12}}
-		child {node[node_black] {31}}
-	}
-	child {node [node_black] {41}}
-;
-\end{tikzpicture}
-}
 &
-\scalebox{0.8}{
-\begin{tikzpicture}[level 1/.style={sibling distance=20mm},
-				   level 2/.style={sibling distance=10mm}]
-\draw[black] (0,1) node[above]{5.};
-\node[node_black]{38}
-	child {node[node_red] {19}
-		child {node[node_black] {12}
-			child{node[node_red] {8}}
-			child{node[node_null] {nil}}
-		}
-		child {node[node_black] {31}}
+\begin{tikzpicture}[scale=0.6]
+\node[node_red] {}
+	child {node[node_black] {}
+		child {node[node_red] {}}
+		child[white] {node[fill=white] {}}
 	}
-	child {node [node_black] {41}}
+	child {node[node_black] {}}
 ;
-\end{tikzpicture}
-}
-&\\
-Når 19 nå kommer inn, så må vi igjen snu på treet for å opprettholde reglene til et BST. Farger nodene på nytt iht. reglene for rød-svarte trær.
-&
-Til slutt setter vi inn 8 som løvnode til 12. Her trenger vi ikke å snu eller fargelegge.
+\end{tikzpicture}\\
 \end{tabular}
-\label{fig:rseks}
-\caption{Eksempel på innsetting av tallene 41, 38, 31, 12, 19 og 8 i et rød-svart tre.}
-\end{figure}
+\end{minipage}
+\begin{minipage}{0.5\textwidth}
+Bytter farger, men må farge roten tilbake til svart igjen.
+\end{minipage}
 
-\vspace{20pt}
+\begin{minipage}{0.6\textwidth}
+\begin{tabular}{lllll}
+&\textbf{Case 2}&eller&&$\rightarrow$\\
+&
+\begin{tikzpicture}[scale=0.6]
+\node[node_black] {}
+	child {node[node_red] {}
+		child[white] {node[fill=white] {}}
+		child {node[node_red] {}}
+	}
+	child {node[node_black] {}}
+;
+\end{tikzpicture}
+&
+\begin{tikzpicture}[scale=0.6]
+\node[node_red] {}
+	child {node[node_black] {}}
+	child {node[node_black] {}
+		child {node[node_red] {}}
+		child[white] {node[fill=white] {}}
+}
+;
+\end{tikzpicture}
+&
+\begin{tikzpicture}[scale=0.6]
+\node[node_black] {}
+	child {node[node_red] {}
+		child[white] {node[fill=white] {}}
+		child {node[node_red] {}}
+	}
+	child {node[node_black] {}}
+;
+\end{tikzpicture}
+&
+\begin{tikzpicture}[scale=0.6]
+\node[node_red] {}
+	child {node[node_red] {}}
+	child {node[node_black] {}
+		child[white] {node[fill=white] {}}
+		child {node[node_black] {}}
+}
+;
+\end{tikzpicture}\\
+\end{tabular}
+\end{minipage}
+\begin{minipage}{0.4\textwidth}
+Roterer forelder, så besteforelder. Må fargelegge om etter rotering.
+\end{minipage}
+
+\begin{minipage}{0.35\textwidth}
+\begin{tabular}{lll}
+&\textbf{Case 3}&$\rightarrow$\\
+&
+\begin{tikzpicture}[scale=0.6]
+\node[node_black] {}
+	child {node[node_red] {}
+		child {node[node_red] {}}
+		child[white] {node[fill=white] {}}
+	}
+	child {node[node_black] {}}
+;
+\end{tikzpicture}
+&
+\begin{tikzpicture}[scale=0.6]
+\node[node_red] {}
+	child {node[node_red] {}}
+	child {node[node_black] {}
+		child[white] {node[fill=white] {}}
+		child {node[node_black] {}}
+}
+;
+\end{tikzpicture}\\
+\end{tabular}
+\end{minipage}
+\begin{minipage}{0.5\textwidth}
+Rotasjon på besteforelder. Må fargelegge om etter rotasjonen.
+\end{minipage}
  
 \begin{figure}[h!]
 \begin{lstlisting}[frame=single]
@@ -1342,6 +1377,8 @@ KRUSKAL (G):
 \textbf{Vekt}&1&2&2&3&3&3&4&8&$\Rightarrow$26
 \end{tabular}
 
+\newpage
+
 % Dybde-først
 \subsection{Dybde-først}
 Dette er klassisk graf-traversering, generalisering av prefiks traversering for trær. Gitt start node $v$: rekursivt traverser alle nabonodene.
@@ -1352,6 +1389,57 @@ public void depthFirstSearch(Node v)
 		if (!w.marked)
 			depthFirstSearch(w);
 \end{lstlisting}
+
+\begin{minipage}{0.5\textwidth}
+\begin{tikzpicture}[every node/.style={draw=black,circle}]
+\node (1)[label={\small 1/24}] at (0,0) {1};
+\node (2)[label={\small 2/13}] at (2,0) {2};
+\node (3)[label={\small 25/30}] at (4,0) {3};
+\node (4)[label={\small 31/34}] at (1,-2) {4};
+\node (5)[label={\small 26/27}] at (3,-2) {5};
+\node (6)[label={\small 14/23}] at (0,-4) {6};
+\node (7)[label={\small 32/33}] at (2,-4) {7};
+\node (8)[label={\small 28/29}] at (4,-4) {8};
+\node (9)[label={\small 15/18}] at (1,-6) {9};
+\node (10)[label={\small 3/12}] at (3,-6) {10};
+\node (11)[label={\small 19/22}] at (0,-8) {11};
+\node (12)[label={\small 16/17}] at (2,-8) {12};
+\node (13)[label={\small 4/11}] at (4,-8) {13};
+\node (14)[label={\small 20/21}] at (1,-10) {14};
+\node (15)[label={\small 5/10}] at (3,-10) {15};
+\node (16)[label={\small 35/36}] at (0,-12) {16};
+\node (17)[label={\small 7/8}] at (2,-12) {17};
+\node (18)[label={\small 6/9}] at (4,-12) {18};
+
+\draw[->, very thick, red] (1) to (2);
+\draw[->, very thick, red] (1) to (6);
+\draw[->, very thick, red] (2) to (10);
+\draw[->, very thick, red] (3) to (5);
+\draw[->, very thick, red] (3) to (8);
+\draw[->, thick] (4) to (6);
+\draw[->, very thick, red] (4) to (7);
+\draw[->, very thick, red] (6) to (9);
+\draw[->, very thick, red] (6) to (11);
+\draw[->, thick] (7) to (9);
+\draw[->, thick] (8) to (10);
+\draw[->, very thick, red] (9) to (12);
+\draw[->, very thick, red] (10) to (13);
+\draw[->, very thick, red] (11) to (14);
+\draw[->, thick] (12) to (10);
+\draw[->, very thick, red] (13) to (15);
+\draw[->, thick] (14) to (15);
+\draw[->, very thick, red] (15) to (18);
+\draw[->, thick] (16) to (14);
+\draw[->, very thick, red] (18) to (17);
+\end{tikzpicture}
+\end{minipage}
+\begin{minipage}{0.5\textwidth}
+Her gjør vi et depth-first search på grafen etter \textit{nodenes rekkefølge}. Tallene som står over hver node er starttid/sluttid.
+\newline \newline
+Første stien går over $1 \rightarrow 2 \rightarrow 10 \rightarrow 13 \rightarrow 15 \rightarrow 18 \rightarrow 17$, når vi kommer til 17, så er det ingen flere veier igjen å gå. Da noterer vi sluttiden og går tilbake på den samme stien, og finner at vi må helt tilbake til 1 for å finne en ny sti som tar oss videre. Da får vi stien: $1 \rightarrow 6 \rightarrow 9 \rightarrow 12$, fra 12 så går det en sti til 10. Men vi har allerede besøkt 10, så da må vi gå tilbake til 6 for å ta den andre stien derfra: $6 \rightarrow 11 \rightarrow 14$. Her må vi helt tilbake til 1 igjen, men alle stiene til 1 er tatt. Det samme for node 2, så vi må ta stiene fra node 3: $3 \rightarrow 5$ og $3 \rightarrow 8$. Så går vi vidre til 4: $4 \rightarrow 7$. Da står vi igjen med kun én ubesøkt node, som er 16. Så vi fører opp 16 til slutt, med besøktid 35 og sluttid 36.
+\end{minipage}
+
+\newpage
 
 \subsection{Biconnectivity}
 \theoremstyle{mytheoremstyle}
@@ -1501,14 +1589,14 @@ Man finner da gruppene med SCCer, det er grupper hvor alle nodene kan nå hveran
 \paragraph{DFS på graf i figur \ref{fig:scc}} Starter i \textit{a}, og setter start- og sluttid for nodene vi besøker.
 
 \begin{tikzpicture}[every node/.style={draw=black,circle}]
-\node (a) at (0,0) {1/16};
-\node (b) at (2,0) {2/15};
-\node (c) at (4,0) {3/12};
-\node (d) at (6,0) {4/11};
-\node (e) at (0,-2) {13/14};
-\node (f) at (2,-2) {7/8};
-\node (g) at (4,-2) {6/9};
-\node (h) at (6,-2) {5/10};
+\node (a)[label={\small 1/16}] at (0,0) {a};
+\node (b)[label={\small 2/15}] at (2,0) {b};
+\node (c)[label={\small 3/12}] at (4,0) {c};
+\node (d)[label={\small 4/11}] at (6,0) {d};
+\node (e)[label={\small 13/14}] at (0,-2) {e};
+\node (f)[label={\small 7/8}] at (2,-2) {f};
+\node (g)[label={\small 6/9}] at (4,-2) {g};
+\node (h)[label={\small 5/10}] at (6,-2) {h};
 
 \draw[->, very thick, red] (a) to (b);
 \draw[->, very thick, red] (b) to (c);
@@ -2205,40 +2293,15 @@ Fjerningen går bra, fordi 1 og 3 kun har ett høyre barn hver. Da kan 3 sitt h�
 
 Først gjør en DFS på grafen. Starter i $a$: $a\rightarrow b \rightarrow e \rightarrow f \rightarrow d \rightarrow a \rightarrow c$. Så reversér kantene og gjør en ny DFS i avtagende rekkefølge.
 
-\begin{minipage}{0.4\textwidth}
-\scalebox{0.8}{
-\begin{tikzpicture}[every node/.style={draw=black, circle}]
-\node (a) at (0,0) {1};
-\node (b) at (3,0) {2};
-\node[fill=red!30] (c) at (1.5,1.2) {6};
-\node (d) at (-1,2) {5};
-\node (e) at (4,2) {3};
-\node (f) at (1.5,3.5) {4};
-
-\draw[<-,thick] (a) to (b);
-\draw[<-,thick] (b) to [bend left] (e);
-\draw[<-,thick] (e) to [bend left] (b);
-\draw[<-,thick] (b) to (c);
-\draw[<-,thick] (a) to (c);
-\draw[<-,thick] (a) to (f);
-\draw[<-,thick] (d) to (a);
-\draw[<-,thick] (f) to (d);
-\draw[<-,thick] (e) to (f);
-\end{tikzpicture}
-}
-\newline
-Ingen måte å nå nr. 5 på fra nr. 6. Så \{\{c\}\} er første SCC.
-\end{minipage}
-\hspace{10pt}
 \begin{minipage}{0.5\textwidth}
 \scalebox{0.8}{
 \begin{tikzpicture}[every node/.style={draw=black, circle}]
-\node[fill=red!30] (a) at (0,0) {1};
-\node[fill=red!30] (b) at (3,0) {2};
-\node[fill=black!30] (c) at (1.5,1.2) {6};
-\node[fill=red!30] (d) at (-1,2) {5};
-\node[fill=red!30] (e) at (4,2) {3};
-\node[fill=red!30] (f) at (1.5,3.5) {4};
+\node[fill=red!30, label={\small1/12}] (a) at (0,0) {a};
+\node[fill=red!30, label={\small2/11}] (b) at (3,0) {b};
+\node[label={\small3/4}] (c) at (1.5,1.2) {c};
+\node[fill=red!30, label=7/8] (d) at (-1,2) {d};
+\node[fill=red!30, label={\small 5/10}] (e) at (4,2) {e};
+\node[fill=red!30, label={\small6/9}] (f) at (1.5,3.5) {f};
 
 \draw[<-,thick] (a) to (b);
 \draw[<-,thick] (b) to [bend left] (e);
@@ -2252,8 +2315,34 @@ Ingen måte å nå nr. 5 på fra nr. 6. Så \{\{c\}\} er første SCC.
 \end{tikzpicture}
 }
 \newline
-Resten av nodene henger sammen, og blir neste SCC: \{\{c\},\{d,f,e,b,a\}\}.
+Gjør en DFS, og så finner vi at alle, bortsett fra c henger sammen. Da er de en SCC.
 \end{minipage}
+\hspace{10pt}
+\begin{minipage}{0.4\textwidth}
+\scalebox{0.8}{
+\begin{tikzpicture}[every node/.style={draw=black, circle}]
+\node[fill=black!30, label={\small1/12}] (a) at (0,0) {a};
+\node[fill=black!30, label={\small2/11}] (b) at (3,0) {b};
+\node[fill=red!30,label={\small3/4}] (c) at (1.5,1.2) {c};
+\node[fill=black!30, label=7/8] (d) at (-1,2) {d};
+\node[fill=black!30, label={\small 5/10}] (e) at (4,2) {e};
+\node[fill=black!30, label={\small6/9}] (f) at (1.5,3.5) {f};
+
+\draw[<-,thick] (a) to (b);
+\draw[<-,thick] (b) to [bend left] (e);
+\draw[<-,thick] (e) to [bend left] (b);
+\draw[<-,thick] (b) to (c);
+\draw[<-,thick] (a) to (c);
+\draw[<-,thick] (a) to (f);
+\draw[<-,thick] (d) to (a);
+\draw[<-,thick] (f) to (d);
+\draw[<-,thick] (e) to (f);
+\end{tikzpicture}
+}
+\newline
+c er den eneste som er igjen, da er den en SCC alene.
+\end{minipage}
+
 
 \subsection{Grafer (oppgave 3, H2013)}
 \paragraph{3a) Finn alle \textit{articulation points} for grafen under. Vis et dybde først-spenntre som starter fra node $A$ samt \textit{Num-} og \textit{Low-}numrene for hver node.}
