@@ -310,6 +310,16 @@ function insert(root, data):
 \end{lstlisting}
 
 \subsubsection{Fjerne element}
+
+\begin{itemize}
+\item
+\textbf{Noden er en løvnode}: kan fjernes direkte.
+\item
+\textbf{Noden har bare ett barn}: foreldrenoden kan enkelt hoppe over den som skal fjernes.
+\item
+\textbf{Noden har to barn}: erstatt verdien i noden med den misnte verdien i høyre subtre. Slett noden som denne minste verdien var i.
+\end{itemize}
+
 \begin{lstlisting}[frame=none]
 public boolean remove (int key) {
 	Node current, parent = root;
@@ -591,9 +601,10 @@ private Node put (Node node, Key key, Value val) {
 
 %%% B-TRÆR %%%
 \subsection{B-trær}
-
+\vspace{-10pt}
 Kravene til et B-tre er følgende:
 \begin{itemize}
+\vspace{-20pt}
 \item
 Alle data er lagret i løvnodene.
 \item
@@ -602,20 +613,6 @@ Roten har mellom \textbf{2} og \textbf{M} barn.
 Alle løvnoder har mellom \textbf{L/2} og \textbf{L} elementer.
 \end{itemize}
 
-\begin{table}[h!]
-\centering
-\begin{tabular}{rll}
-&Average&Worst case\\
-\textbf{Plass} & O($n$) & O($n$)\\
-\textbf{Søk} & O($\log n$) & O($\log n$)\\
-\textbf{Innsetting} & O($\log n$) & O($\log n$)\\
-\textbf{Sletting} & O($\log n$) & O($\log n$)\\
-\end{tabular}
-\label{tab:obst}
-\caption{Tidkompleksitet for B-trær.}
-\end{table}
-
-\newpage
 
 \paragraph{Eksempel på innsetting i B-tre} Sette inn tallene 2, 6, 17, 20, 24, 25, 27, 29, 30, 31, 32, 5, 21, 1, 40, 45, 50, 70 med kravene M = 5, L = 5.
 
@@ -2327,6 +2324,7 @@ Gjør en DFS, og så finner vi at alle, bortsett fra c henger sammen. Da er de e
 \node[fill=black!30, label=7/8] (d) at (-1,2) {d};
 \node[fill=black!30, label={\small 5/10}] (e) at (4,2) {e};
 \node[fill=black!30, label={\small6/9}] (f) at (1.5,3.5) {f};
+g
 
 \draw[<-,thick] (a) to (b);
 \draw[<-,thick] (b) to [bend left] (e);
